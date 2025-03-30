@@ -55,3 +55,7 @@
 --es-slate-900: #777472;
 --es-slate-950: #5f5c5b;
 }
+
+.vet{
+    font-weight: bold;
+}
