@@ -1,0 +1,101 @@
+:root {
+    /* es-primary colors */
+    --es-primary-25: #e8f0f2;
+    --es-primary-50: #d0e1e4;
+    --es-primary-100: #a2c3ca;
+    --es-primary-200: #73a5af;
+    --es-primary-300: #458795;
+    --es-primary-400: #16697a;
+    --es-primary-500: #145f6e;
+    --es-primary-600: #125462;
+    --es-primary-700: #0f4a55;
+    --es-primary-800: #0d3f49;
+    --es-primary-900: #0b353d;
+    --es-primary-950: #092a31;
+
+    /* es-secondary colors */
+    --es-secondary-25: #fffeec;
+    --es-secondary-50: #fefdd8;
+    --es-secondary-100: #fdfab2;
+    --es-secondary-200: #fcf88b;
+    --es-secondary-300: #fbf565;
+    --es-secondary-400: #faf33e;
+    --es-secondary-500: #e1db38;
+    --es-secondary-600: #c8c232;
+    --es-secondary-700: #afaa2b;
+    --es-secondary-800: #969225;
+    --es-secondary-900: #7d7a1f;
+    --es-secondary-950: #646119;
+
+    /* es-tertiary colors */
+    --es-tertiary-25: #fff6ea;
+    --es-tertiary-50: #ffedd5;
+    --es-tertiary-100: #ffdbaa;
+    --es-tertiary-200: #ffca80;
+    --es-tertiary-300: #ffb855;
+    --es-tertiary-400: #ffa62b;
+    --es-tertiary-500: #e69527;
+    --es-tertiary-600: #cc8522;
+    --es-tertiary-700: #b3741e;
+    --es-tertiary-800: #99641a;
+    --es-tertiary-900: #805316;
+    --es-tertiary-950: #664211;
+
+    /* es-slate colors */
+    --es-slate-25: #fdfdfc;
+    --es-slate-50: #fbfaf9;
+    --es-slate-100: #f8f5f4;
+    --es-slate-200: #f4f1ee;
+    --es-slate-300: #f1ece9;
+    --es-slate-400: #ede7e3;
+    --es-slate-500: #d5d0cc;
+    --es-slate-600: #beb9b6;
+    --es-slate-700: #a6a29f;
+    --es-slate-800: #8e8b88;
+    --es-slate-900: #777472;
+    --es-slate-950: #5f5c5b;
+}
+
+body {
+    background-color: var(--es-secondary-50);
+}
+
+main.dashBoard {
+    background-color: var(--es-primary-600);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px;
+    color: white;
+}
+
+header {
+    background-color: var(--es-secondary-300);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    color: var(--es-tertiary-950, darkgoldenrod);
+}
+
+header h1, header h3, header h5 {
+    margin: 0;
+}
+
+.vet {
+    font-weight: bold;
+}
+
+.card-header {
+    background-color: var(--es-tertiary-400);
+    color: var(--es-slate-950);
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--es-slate-900);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
