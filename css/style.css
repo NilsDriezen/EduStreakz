@@ -1,0 +1,39 @@
+/* Custom Styles */
+body {
+    font-family: 'LT Wave', Arial, sans-serif;
+    background-color: #EDE7E3; /* Licht beige */
+    color: #16697A; /* Donkerblauw */
+}
+
+.bg-primary {
+    background-color: #16697A !important; /* Donkerblauw */
+}
+
+.bg-dark {
+    background-color: #489FB5 !important; /* Middelblauw */
+}
+
+.text-secondary {
+    color: #82C0CC !important; /* Lichtblauw */
+}
+
+.text-muted {
+    color: #489FB5 !important; /* Middelblauw */
+}
+
+.text-accent {
+    color: #FFA62B !important; /* Oranje */
+}
+
+h1, h2 {
+    font-weight: bold;
+}
+
+.shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+blockquote {
+    border-left: 4px solid #FFA62B; /* Oranje */
+    padding-left: 1rem;
+}
