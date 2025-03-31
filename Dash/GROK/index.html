@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduStreakz | Dashboard</title>
+    <link rel="stylesheet" href="../bootstrap.min.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" style="background-color: var(--es-primary-50);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">EduStreakz</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="nav-link">Welkom, <span class="vet">[Gebruikersnaam]</span></span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.html">Uitloggen</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <nav aria-label="breadcrumb" class="container mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="home.html">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        </ol>
+    </nav>
+
+    <main class="dashBoard container">
+        <header>
+            <h1>EduStreakz Dashboard</h1>
+            <h3>Welkom, <span class="vet">[Gebruikersnaam]</span>!</h3>
+            <h5>Mooi dat je terug bent. Blijf leren en je streak volhouden!</h5>
+        </header>
+
+        <section id="progress">
+            <h2>Jouw Voortgang</h2>
+            <ul>
+                <li>&#128197; <span class="vet">Streak</span>: <span class="vet">15</span> dagen achtereen leren!</li>
+                <li>&#127942; <span class="vet">Totaal XP</span>: <span class="vet">1200</span></li>
+                <li>&#127918; <span class="vet">Gespeelde games</span>: <span class="vet">8</span></li>
+            </ul>
+        </section>
+
+        <section id="games">
+            <h2>Beschikbare Games</h2>
+            <h4>Klaar om te spelen? Kies een game en leer iets nieuws!</h4>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title">Wiskunde Avontuur</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Verbeter je rekenvaardigheden in een spannend avontuur.</p>
+                            <a href="gamePage/game1.html" class="btn btn-primary">Speel nu</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title">Wetenschap Quest</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Ontdek natuurkunde en chemie op een leuke manier.</p>
+                            <a href="gamePage/game2.html" class="btn btn-primary">Speel nu</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title">Algemene Kennis Bingo</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Test je kennis in een interactieve bingo.</p>
+                            <a href="gamePage/game3.html" class="btn btn-primary">Speel nu</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="leaderboard">
+            <h2>Leaderboard</h2>
+            <p>Wie leidt deze week?</p>
+            <p>&#129351; <span class="vet">Sophie</span> - 1500 XP</p>
+            <p>&#129352; <span class="vet">Mark</span> - 1365 XP</p>
+            <p>&#129353; <span class="vet">Lisa</span> - 1200 XP</p>
+        </section>
+
+        <section id="rewards">
+            <h2>Beloningen & Doelen</h2>
+            <p>&#127919; <span class="vet">Volgende doel</span>: Speel 20 dagen achtereen voor een speciale badge!</p>
+            <p>&#128275; <span class="vet">Badges</span>: 10 vrijgespeeld (o.a. 'Beginner', 'Expert')</p>
+        </section>
+
+        <section id="community-support">
+            <h2>Community & Support</h2>
+            <p>&#128172; <span class="vet">Deel mee</span>: Praat mee in onze community!</p>
+            <p>&#128231; <span class="vet">Hulp nodig?</span> Mail naar <a href="mailto:support@edustreakz.com">support@edustreakz.com</a></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024-2025 EduStreakz - Team04 1ITF01 ThomasMore. Alle rechten voorbehouden.</p>
+    </footer>
+
+    <script src="bootstrap.bundle.min.js"></script>
+</body>
+</html>
