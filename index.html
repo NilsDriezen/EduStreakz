@@ -3,48 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduStreakz - Leer en Speel!</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Leerzame Spelletjes</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <h1>EduStreakz</h1>
-        <p>Houd je streak en leer elke dag iets nieuws!</p>
+    <!-- Header -->
+    <header class="bg-primary text-white text-center py-5">
+        <h1 class="display-4">Leerzame Spelletjes</h1>
+        <p class="lead">Ontdek en leer met onze interactieve games!</p>
     </header>
-    
-    <nav>
-        <ul>
-            <li><a href="#games">Spellen</a></li>
-            <li><a href="#over">Over Ons</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <section id="games">
-        <h2>Speel en Leer</h2>
-        <p>Versterk je vaardigheden met onze leuke educatieve games!</p>
-        <button onclick="startGame()">Start een game</button>
-    </section>
-    
-    <section id="over">
-        <h2>Over EduStreakz</h2>
-        <p>EduStreakz helpt je om dagelijks te leren met motiverende streaks!</p>
-    </section>
-    
-    <section id="contact">
-        <h2>Contact</h2>
-        <p>Heb je vragen? Stuur ons een bericht!</p>
-    </section>
-    
-    <footer>
-        <p>&copy; 2025 EduStreakz - Blijf leren!</p>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- Info Section -->
+        <section id="info" class="row mb-5">
+            <div class="col-md-6">
+                <h2 class="text-secondary">Informatie</h2>
+                <p class="text-muted">Onze website biedt drie unieke spelletjes die je helpen specifieke leerdoelen te behalen. Perfect voor educatie en plezier!</p>
+            </div>
+            <div class="col-md-6">
+                <img src="https://placehold.co/400x300/16697A/FFFFFF?text=Spelletjes+Preview" alt="Spelletjes Preview" class="img-fluid rounded shadow">
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="row mb-5">
+            <div class="col-md-6 order-md-2">
+                <h2 class="text-secondary">Over Ons</h2>
+                <p class="text-muted">Wij zijn een team van enthousiaste ontwikkelaars en docenten die leren leuk willen maken door middel van technologie.</p>
+            </div>
+            <div class="col-md-6 order-md-1">
+                <img src="https://placehold.co/400x300/489FB5/FFFFFF?text=Ons+Team" alt="Team Foto" class="img-fluid rounded shadow">
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="text-center mb-5">
+            <h2 class="text-secondary">Contact</h2>
+            <p class="text-muted">Heb je vragen? Neem contact met ons op via <a href="mailto:info@leerzamespelletjes.nl" class="text-accent">info@leerzamespelletjes.nl</a>.</p>
+        </section>
+
+        <!-- Review Section -->
+        <section id="review" class="text-center mb-5">
+            <h2 class="text-secondary">Reviews</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <blockquote class="blockquote">
+                        <p class="mb-0">"Superleuke manier om te leren!"</p>
+                        <footer class="blockquote-footer">Jan, Student</footer>
+                    </blockquote>
+                </div>
+                <div class="col-md-4">
+                    <blockquote class="blockquote">
+                        <p class="mb-0">"Mijn kinderen zijn dol op deze spellen."</p>
+                        <footer class="blockquote-footer">Lisa, Ouder</footer>
+                    </blockquote>
+                </div>
+                <div class="col-md-4">
+                    <blockquote class="blockquote">
+                        <p class="mb-0">"Innovatief en effectief!"</p>
+                        <footer class="blockquote-footer">Mark, Docent</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- Images Section -->
+        <section id="images" class="text-center">
+            <h2 class="text-secondary">Galerij</h2>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <img src="https://placehold.co/300x200/16697A/FFFFFF?text=Spel+1" alt="Spel 1" class="img-fluid rounded shadow">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <img src="https://placehold.co/300x200/489FB5/FFFFFF?text=Spel+2" alt="Spel 2" class="img-fluid rounded shadow">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <img src="https://placehold.co/300x200/82C0CC/FFFFFF?text=Spel+3" alt="Spel 3" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>© 2025 Leerzame Spelletjes. Alle rechten voorbehouden.</p>
     </footer>
-    
-    <script>
-        function startGame() {
-            alert("Game wordt geladen...");
-            // Hier kan je een echte gamepagina linken
-        }
-    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
