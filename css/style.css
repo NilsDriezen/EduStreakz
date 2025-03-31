@@ -1,39 +1,125 @@
-/* Custom Styles */
+/* Font Family */
 body {
-    font-family: 'LT Wave', Arial, sans-serif;
-    background-color: #EDE7E3; /* Licht beige */
-    color: #16697A; /* Donkerblauw */
+    font-family: 'LT Wave', sans-serif;
 }
 
-.bg-primary {
-    background-color: #16697A !important; /* Donkerblauw */
+/* Navbar */
+.navbar {
+    padding: 1rem 0;
 }
 
-.bg-dark {
-    background-color: #489FB5 !important; /* Middelblauw */
-}
-
-.text-secondary {
-    color: #82C0CC !important; /* Lichtblauw */
-}
-
-.text-muted {
-    color: #489FB5 !important; /* Middelblauw */
-}
-
-.text-accent {
-    color: #FFA62B !important; /* Oranje */
-}
-
-h1, h2 {
+.edu-logo {
+    font-size: 1.8rem;
     font-weight: bold;
+    color: #16697A;
 }
 
-.shadow {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.nav-link {
+    font-weight: 500;
+    color: #16697A !important;
+    margin: 0 0.5rem;
 }
 
-blockquote {
-    border-left: 4px solid #FFA62B; /* Oranje */
-    padding-left: 1rem;
+.nav-link:hover {
+    color: #FFA62B !important;
+}
+
+.btn-primary {
+    background-color: #16697A;
+    border-color: #16697A;
+}
+
+.btn-primary:hover {
+    background-color: #0d4f5d;
+    border-color: #0d4f5d;
+}
+
+.btn-outline-primary {
+    color: #16697A;
+    border-color: #16697A;
+}
+
+.btn-outline-primary:hover {
+    background-color: #16697A;
+    border-color: #16697A;
+}
+
+/* Hero Section */
+.hero {
+    padding: 8rem 0 6rem;
+    background-color: white;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #16697A;
+    margin-bottom: 1.5rem;
+}
+
+.hero p.lead {
+    font-size: 1.25rem;
+    color: #495057;
+    margin-bottom: 2rem;
+}
+
+/* Sections */
+section {
+    padding: 6rem 0;
+}
+
+h2 {
+    color: #16697A;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.bg-light {
+    background-color: #EDE7E3 !important;
+}
+
+/* Cards */
+.card {
+    transition: transform 0.3s ease;
+    border-radius: 0.5rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Pricing Card Highlight */
+.card.border-primary {
+    border: 2px solid #16697A !important;
+}
+
+/* Reviews */
+.text-warning {
+    color: #FFA62B !important;
+}
+
+/* Footer */
+footer a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #FFA62B !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero {
+        padding: 6rem 0 4rem;
+        text-align: center;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    section {
+        padding: 4rem 0;
+    }
 }
