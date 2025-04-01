@@ -1,6 +1,7 @@
 /* Font Family */
 body {
     font-family: 'LT Wave', sans-serif;
+    text-align: center; /* Center all text by default */
 }
 
 /* Navbar */
@@ -34,44 +35,25 @@ body {
     border-color: #0d4f5d;
 }
 
-.btn-outline-primary {
-    color: #16697A;
-    border-color: #16697A;
-}
-
-.btn-outline-primary:hover {
-    background-color: #16697A;
-    border-color: #16697A;
-}
-
-/* Hero Section */
-.hero {
-    padding: 8rem 0 6rem;
-    background-color: white;
-}
-
-.hero h1 {
-    font-size: 3.5rem;
-    font-weight: bold;
-    color: #16697A;
-    margin-bottom: 1.5rem;
-}
-
-.hero p.lead {
-    font-size: 1.25rem;
-    color: #495057;
-    margin-bottom: 2rem;
-}
-
 /* Sections */
 section {
     padding: 6rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh; /* Ensure sections take up some vertical space */
 }
 
-h2 {
+h1, h2 {
     color: #16697A;
     font-weight: bold;
     margin-bottom: 1.5rem;
+}
+
+p.lead {
+    font-size: 1.25rem;
+    color: #495057;
+    margin-bottom: 2rem;
 }
 
 .bg-light {
@@ -82,23 +64,19 @@ h2 {
 .card {
     transition: transform 0.3s ease;
     border-radius: 0.5rem;
+    margin: 0 auto; /* Center cards horizontally */
+    max-width: 400px; /* Limit card width */
 }
 
 .card:hover {
     transform: translateY(-5px);
 }
 
-/* Pricing Card Highlight */
-.card.border-primary {
-    border: 2px solid #16697A !important;
-}
-
-/* Reviews */
-.text-warning {
-    color: #FFA62B !important;
-}
-
 /* Footer */
+footer {
+    text-align: center; /* Center footer content */
+}
+
 footer a {
     text-decoration: none;
     transition: color 0.3s ease;
@@ -108,18 +86,30 @@ footer a:hover {
     color: #FFA62B !important;
 }
 
+/* Center accordion */
+.accordion {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Center forms and lists */
+ul, form {
+    text-align: left; /* Keep list and form text left-aligned for readability */
+    max-width: 500px;
+    margin: 0 auto; /* Center the container */
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-    .hero {
-        padding: 6rem 0 4rem;
-        text-align: center;
+    section {
+        padding: 4rem 0;
     }
     
-    .hero h1 {
+    h1 {
         font-size: 2.5rem;
     }
     
-    section {
-        padding: 4rem 0;
+    .navbar-nav {
+        text-align: center;
     }
 }
