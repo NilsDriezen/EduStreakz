@@ -28,6 +28,15 @@ function updateStreak(gehaald) {
       }
     document.getElementById("streak").innerText = streak;
     }
+function simulateGame(resultaat) {
+      if (resultaat) {
+        alert("Je hebt het gehaald!");
+      } else {
+        alert("Helaas, niet gehaald.");
+      }
+      updateStreak(resultaat);
+    }
 
+document.getElementById("streak").innerText = localStorage.getItem("streak") || 0;
 
 
