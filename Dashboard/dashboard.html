@@ -113,6 +113,15 @@
         </main>
     </div>
 
+    <!-- Classes sectie -->
+<section class="classes-section">
+    <h2>Jouw Klassen</h2>
+    <p>Hier zijn de klassen waarin je bent ingeschreven.</p>
+    <ul id="classes-list">
+        <li>Loading...</li>
+    </ul>
+</section>
+
     <!-- Footer -->
     <footer class="footer">
         <p>© Rechten voorbehouden aan team04 1ITF01 ThomasMore 2024-2025</p>
@@ -145,7 +154,7 @@
             const token = localStorage.getItem('token');
             if (!token) {
                 alert('Please log in to access the dashboard.');
-                window.location.href = '/InlogEnRegistreer.html';
+                window.location.href = '/Inlog%20&%20registreer%20pagina/InlogEnRegistreer.html';
                 return;
             }
 
@@ -185,7 +194,7 @@
                 console.error('Error fetching user data:', error);
                 alert('Failed to load dashboard data. Please try again later.');
                 localStorage.removeItem('token');
-                window.location.href = '/InlogEnRegistreer.html';
+                window.location.href = '/Inlog%20&%20registreer%20pagina/InlogEnRegistreer.html';
             }
         }
 
@@ -194,7 +203,7 @@
             localStorage.removeItem('token');
             document.getElementById('page-body').classList.add('fade-out');
             setTimeout(() => {
-                window.location.href = '/InlogEnRegistreer.html';
+                window.location.href = '/Inlog%20&%20registreer%20pagina/InlogEnRegistreer.html';
             }, 500);
         }
 
