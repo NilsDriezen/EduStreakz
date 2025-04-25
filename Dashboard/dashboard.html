@@ -37,6 +37,39 @@
         }
         return gk_fileData[filename] || "";
         }
+        </script><script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex));
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+</script>
+<!DOCTYPE html>
         </script><!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -75,7 +108,7 @@
                 </div>
                 <a href="profile.html" class="user-profile">
                     <i class="fas fa-user-circle"></i>
-                    <span id="streak-header">15 dagen streak</span>
+                    <span id="streak-header">Loading...</span>
                 </a>
             </header>
 
@@ -86,17 +119,17 @@
                     <div class="progress-card">
                         <i class="fas fa-calendar-alt"></i>
                         <h3>Streak</h3>
-                        <p>Je bent al <span class="highlight" id="streak-days">15</span> dagen achter elkaar aan het leren!</p>
+                        <p>Je bent al <span class="highlight" id="streak-days">Loading...</span> dagen achter elkaar aan het leren!</p>
                     </div>
                     <div class="progress-card">
                         <i class="fas fa-trophy"></i>
                         <h3>Totaal Punten</h3>
-                        <p><span class="highlight" id="total-points">1200</span> XP</p>
+                        <p><span class="highlight" id="total-points">Loading...</span> XP</p>
                     </div>
                     <div class="progress-card">
                         <i class="fas fa-gamepad"></i>
                         <h3>Gespeelde Games</h3>
-                        <p><span class="highlight" id="games-played">8</span></p>
+                        <p><span class="highlight" id="games-played">Loading...</span></p>
                     </div>
                 </div>
             </section>
@@ -104,21 +137,21 @@
             <!-- Games sectie -->
             <section class="games-section">
                 <h2>Beschikbare Games</h2>
-                <p>Klaar om te spelen? Kies een game en leer iets nieuws!</p>
+                <p>Klaar om te spelen? Kies een game en leer iets nieuw!</p>
                 <div class="games-grid">
                     <div class="game-card">
                         <h3>Wiskunde Avontuur</h3>
-                        <p id="math-adventure-stats">Score: 0 | Level: 1</p>
+                        <p id="math-adventure-stats">Score: Loading... | Level: Loading...</p>
                         <a href="gamePage/game1.html" class="btn">Speel nu</a>
                     </div>
                     <div class="game-card">
                         <h3>Wetenschap Quest</h3>
-                        <p id="science-quest-stats">Score: 0 | Level: 1</p>
+                        <p id="science-quest-stats">Score: Loading... | Level: Loading...</p>
                         <a href="gamePage/game2.html" class="btn">Speel nu</a>
                     </div>
                     <div class="game-card">
                         <h3>Algemene Kennis Bingo</h3>
-                        <p id="general-knowledge-stats">Score: 0 | Level: 1</p>
+                        <p id="general-knowledge-stats">Score: Loading... | Level: Loading...</p>
                         <a href="gamePage/game3.html" class="btn">Speel nu</a>
                     </div>
                 </div>
@@ -130,6 +163,8 @@
                     <h2>Leaderboard</h2>
                     <p>Wie heeft deze week de hoogste score?</p>
                     <ul id="leaderboard-list">
+                        <li>Loading...</li>
+
                         <!-- Dynamically populated -->
                     </ul>
                 </section>
@@ -189,6 +224,14 @@
                     throw new Error('Failed to fetch user data');
                 }
                 const data = await response.json();
+
+
+                // Redirect teachers to teacher dashboard
+                if (data.role === 'teacher') {
+                    window.location.href = '/teacher_dashboard.html';
+                    return null;
+                }
+
 
                 // Update dashboard with user data
                 document.getElementById('welcome-message').textContent = `Welkom, ${data.username}!`;
