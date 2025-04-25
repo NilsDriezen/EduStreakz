@@ -70,6 +70,7 @@
         }
 </script>
 <!DOCTYPE html>
+        </script><!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8" />
@@ -163,6 +164,8 @@
                     <p>Wie heeft deze week de hoogste score?</p>
                     <ul id="leaderboard-list">
                         <li>Loading...</li>
+
+                        <!-- Dynamically populated -->
                     </ul>
                 </section>
 
@@ -222,11 +225,13 @@
                 }
                 const data = await response.json();
 
+
                 // Redirect teachers to teacher dashboard
                 if (data.role === 'teacher') {
                     window.location.href = '/teacher_dashboard.html';
                     return null;
                 }
+
 
                 // Update dashboard with user data
                 document.getElementById('welcome-message').textContent = `Welkom, ${data.username}!`;
