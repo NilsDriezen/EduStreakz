@@ -21,6 +21,7 @@
                     <li><a href="gamePage/game1.html"><i class="fas fa-calculator"></i> Wiskunde Avontuur</a></li>
                     <li><a href="gamePage/game2.html"><i class="fas fa-flask"></i> Wetenschap Quest</a></li>
                     <li><a href="gamePage/game3.html"><i class="fas fa-brain"></i> Algemene Kennis Bingo</a></li>
+                    <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Uitloggen</a></li>
                 </ul>
             </nav>
         </aside>
@@ -30,12 +31,12 @@
             <!-- Header met profiel -->
             <header class="dashboard-header">
                 <div class="header-title">
-                    <h1>Welkom, speler!</h1>
+                    <h1 id="welcome-message">Welkom, speler!</h1>
                     <p>Mooi dat je weer terug bent! Blijf je streak volhouden en blijf leren.</p>
                 </div>
                 <a href="profile.html" class="user-profile">
                     <i class="fas fa-user-circle"></i>
-                    <span>15 dagen streak</span>
+                    <span id="streak-header">15 dagen streak</span>
                 </a>
             </header>
 
@@ -46,17 +47,17 @@
                     <div class="progress-card">
                         <i class="fas fa-calendar-alt"></i>
                         <h3>Streak</h3>
-                        <p>Je bent al <span class="highlight">15</span> dagen achter elkaar aan het leren!</p>
+                        <p>Je bent al <span class="highlight" id="streak-days">15</span> dagen achter elkaar aan het leren!</p>
                     </div>
                     <div class="progress-card">
                         <i class="fas fa-trophy"></i>
                         <h3>Totaal Punten</h3>
-                        <p><span class="highlight">1200</span> XP</p>
+                        <p><span class="highlight" id="total-points">1200</span> XP</p>
                     </div>
                     <div class="progress-card">
                         <i class="fas fa-gamepad"></i>
                         <h3>Gespeelde Games</h3>
-                        <p><span class="highlight">8</span></p>
+                        <p><span class="highlight" id="games-played">8</span></p>
                     </div>
                 </div>
             </section>
@@ -68,18 +69,18 @@
                 <div class="games-grid">
                     <div class="game-card">
                         <h3>Wiskunde Avontuur</h3>
-                        <p>Oefen je rekenvaardigheden in een spannende omgeving!</p>
-                        <a href="#" class="btn">Speel nu</a>
+                        <p id="math-adventure-stats">Score: 0 | Level: 1</p>
+                        <a href="gamePage/game1.html" class="btn">Speel nu</a>
                     </div>
                     <div class="game-card">
                         <h3>Wetenschap Quest</h3>
-                        <p>Ontdek de geheimen van de natuurkunde en chemie.</p>
-                        <a href="#" class="btn">Speel nu</a>
+                        <p id="science-quest-stats">Score: 0 | Level: 1</p>
+                        <a href="gamePage/game2.html" class="btn">Speel nu</a>
                     </div>
                     <div class="game-card">
                         <h3>Algemene Kennis Bingo</h3>
-                        <p>Test je kennis in een interactieve bingo-setup!</p>
-                        <a href="#" class="btn">Speel nu</a>
+                        <p id="general-knowledge-stats">Score: 0 | Level: 1</p>
+                        <a href="gamePage/game3.html" class="btn">Speel nu</a>
                     </div>
                 </div>
             </section>
@@ -89,7 +90,7 @@
                 <section class="leaderboard-section">
                     <h2>Leaderboard</h2>
                     <p>Wie heeft deze week de hoogste score?</p>
-                    <ul>
+                    <ul id="leaderboard-list">
                         <li><i class="fas fa-medal"></i> <span class="highlight">Sophie</span> - 1500 XP</li>
                         <li><i class="fas fa-medal"></i> <span class="highlight">Mark</span> - 1365 XP</li>
                         <li><i class="fas fa-medal"></i> <span class="highlight">Lisa</span> - 1200 XP</li>
@@ -107,7 +108,7 @@
             <section class="community-section">
                 <h2>Community & Support</h2>
                 <p><i class="fas fa-comments"></i> <span class="highlight">Praat mee</span> in onze community en deel je voortgang!</p>
-                <p><i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig?</span> Neem contact op via <a href="mailto:support@edustreakz.com">support@edustreakz.com</a></p>
+                <p><i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig?</span> Neem contact op via <a href="/cdn-cgi/l/email-protection#ed9e989d9d829f99ad8889989e999f888c8697c38e8280"><span class="__cf_email__" data-cfemail="4f3c3a3f3f203d3b0f2a2b3a3c3b3d2a2e2435612c2022">[email&#160;protected]</span></a></p>
             </section>
         </main>
     </div>
@@ -119,5 +120,86 @@
 
     <!-- JavaScript -->
     <script src="dashboard.js"></script>
+    <script>
+        // Existing fade-out functionality from dashboard.js
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Skip fade-out for logout link since it's handled separately
+                if (link.getAttribute('onclick') === 'logout()') return;
+                
+                e.preventDefault(); // Voorkom standaardgedrag van de link
+                const href = link.getAttribute('href');
+                
+                // Voeg fade-out klasse toe aan de body
+                document.getElementById('page-body').classList.add('fade-out');
+                
+                // Wacht tot de animatie klaar is voordat je navigeert
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 500); // Duur van de fade-out animatie (0.5s)
+            });
+        });
+
+        // Fetch user data from the backend
+        async function fetchUserData() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please log in to access the dashboard.');
+                window.location.href = '/InlogEnRegistreer.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('https://edu-streakz-backend.vercel.app/api/user/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+                const data = await response.json();
+
+                // Update the dashboard with user data
+                document.getElementById('welcome-message').textContent = `Welkom, ${data.username}!`;
+                document.getElementById('streak-header').textContent = `${data.streak} dagen streak`;
+                document.getElementById('streak-days').textContent = data.streak;
+
+                // Calculate total points and games played
+                const totalPoints = data.games.reduce((sum, game) => sum + game.score, 0);
+                const gamesPlayed = data.games.length; // Assuming each game entry counts as a played game
+                document.getElementById('total-points').textContent = totalPoints;
+                document.getElementById('games-played').textContent = gamesPlayed;
+
+                // Update game stats
+                data.games.forEach(game => {
+                    if (game.game_name === 'Math Adventure') {
+                        document.getElementById('math-adventure-stats').textContent = `Score: ${game.score} | Level: ${game.level}`;
+                    } else if (game.game_name === 'Science Quest') {
+                        document.getElementById('science-quest-stats').textContent = `Score: ${game.score} | Level: ${game.level}`;
+                    } else if (game.game_name === 'General Knowledge Bingo') {
+                        document.getElementById('general-knowledge-stats').textContent = `Score: ${game.score} | Level: ${game.level}`;
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                alert('Failed to load dashboard data. Please try again later.');
+                localStorage.removeItem('token');
+                window.location.href = '/InlogEnRegistreer.html';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            document.getElementById('page-body').classList.add('fade-out');
+            setTimeout(() => {
+                window.location.href = '/InlogEnRegistreer.html';
+            }, 500);
+        }
+
+        // Fetch user data when the page loads
+        document.addEventListener('DOMContentLoaded', fetchUserData);
+    </script>
 </body>
 </html>
