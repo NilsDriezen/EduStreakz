@@ -1,4 +1,43 @@
-<!DOCTYPE html>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8" />
@@ -33,13 +72,12 @@
                 <div class="profile-pic" id="profile-pic">
                     <img id="profile-pic-img" src="" alt="Profielfoto" style="display: none;" />
                     <i id="profile-pic-icon" class="fas fa-user-circle"></i>
-                    <!-- Verborgen input voor foto-upload -->
                     <input type="file" id="profile-pic-upload" accept="image/*" style="display: none;" />
                 </div>
                 <div class="profile-details">
                     <h1 id="username">Speler Naam</h1>
-                    <p id="join-date">Lid sinds: April 2024</p>
-                    <p id="location">Locatie: Amsterdam, Nederland</p>
+                    <p id="join-date">Lid sinds: Loading...</p>
+                    <p id="location">Locatie: Loading...</p>
                 </div>
             </div>
         </section>
@@ -53,22 +91,22 @@
                     <p>
                         <i class="fas fa-info-circle"></i>
                         <strong class="editable" data-field="bio">Bio:</strong>
-                        <span id="bio">Ik ben een enthousiaste leerling die houdt van wiskunde en wetenschap!</span>
+                        <span id="bio">Loading...</span>
                     </p>
                     <p>
                         <i class="fas fa-graduation-cap"></i>
                         <strong class="editable" data-field="opleiding">Opleiding:</strong>
-                        <span id="opleiding">Middelbare school, 3e jaar</span>
+                        <span id="opleiding">Loading...</span>
                     </p>
                     <p>
                         <i class="fas fa-star"></i>
                         <strong class="editable" data-field="favoriete-game">Favoriete Game:</strong>
-                        <span id="favoriete-game">Wiskunde Avontuur</span>
+                        <span id="favoriete-game">Loading...</span>
                     </p>
                     <p>
                         <i class="fas fa-envelope"></i>
                         <strong class="editable" data-field="email">E-mail:</strong>
-                        <span id="email">[email protected]</span>
+                        <span id="email">Loading...</span>
                     </p>
                 </section>
 
@@ -98,23 +136,8 @@
 
                 <section class="badges-section">
                     <h2>Vrijgespeelde Badges</h2>
-                    <div class="badges-grid">
-                        <div class="badge">
-                            <i class="fas fa-award"></i>
-                            <p>Beginner</p>
-                        </div>
-                        <div class="badge">
-                            <i class="fas fa-award"></i>
-                            <p>Expert</p>
-                        </div>
-                        <div class="badge">
-                            <i class="fas fa-award"></i>
-                            <p>Overwinnaar</p>
-                        </div>
-                        <div class="badge">
-                            <i class="fas fa-award"></i>
-                            <p>Streak Master</p>
-                        </div>
+                    <div class="badges-grid" id="badges-grid">
+                        <!-- Dynamically populated -->
                     </div>
                 </section>
             </div>
@@ -124,33 +147,15 @@
                 <section class="activity-section">
                     <h2>Recente Activiteiten</h2>
                     <ul id="activity-list">
-                        <li><i class="fas fa-check-circle"></i> Wiskunde Avontuur gespeeld - 50 XP verdiend (2 uur geleden)</li>
-                        <li><i class="fas fa-check-circle"></i> Wetenschap Quest voltooid - 75 XP verdiend (Gisteren)</li>
-                        <li><i class="fas fa-check-circle"></i> Nieuwe badge verdiend: "Expert" (3 dagen geleden)</li>
-                        <li><i class="fas fa-check-circle"></i> Algemene Kennis Bingo gespeeld - 30 XP verdiend (5 dagen geleden)</li>
+                        <!-- Dynamically populated -->
                     </ul>
                 </section>
 
                 <section class="friends-section">
                     <h2>Vrienden & Community</h2>
                     <p><i class="fas fa-users"></i> <strong>Aantal Vrienden:</strong> <span id="friend-count">12</span></p>
-                    <div class="friends-grid">
-                        <div class="friend">
-                            <i class="fas fa-user"></i>
-                            <p>Sophie</p>
-                        </div>
-                        <div class="friend">
-                            <i class="fas fa-user"></i>
-                            <p>Mark</p>
-                        </div>
-                        <div class="friend">
-                            <i class="fas fa-user"></i>
-                            <p>Lisa</p>
-                        </div>
-                        <div class="friend">
-                            <i class="fas fa-user"></i>
-                            <p>Alex</p>
-                        </div>
+                    <div class="friends-grid" id="friends-grid">
+                        <!-- Dynamically populated -->
                     </div>
                     <a href="#" class="btn">Bekijk Alle Vrienden</a>
                 </section>
@@ -188,9 +193,8 @@
     </footer>
 
     <!-- JavaScript -->
-    <script src="profile.js"></script>
     <script>
-        // Existing profile.js functionality
+        // Modal functionality for editing "Over Mij"
         const editModal = document.getElementById('edit-modal');
         const modalTitle = document.getElementById('modal-title');
         const modalInput = document.getElementById('modal-input');
@@ -220,6 +224,7 @@
             editModal.style.display = 'none';
         });
 
+        // Modal functionality for profile picture
         const profilePicModal = document.getElementById('profile-pic-modal');
         const profilePicChoose = document.getElementById('profile-pic-choose');
         const profilePicRemove = document.getElementById('profile-pic-remove');
@@ -262,10 +267,10 @@
             }
         });
 
+        // Fade-out functionality
         document.querySelectorAll('a:not(.btn)').forEach(link => {
             link.addEventListener('click', (e) => {
                 if (link.getAttribute('onclick') === 'logout()') return;
-                
                 e.preventDefault();
                 const href = link.getAttribute('href');
                 document.getElementById('page-body').classList.add('fade-out');
@@ -275,7 +280,7 @@
             });
         });
 
-        // Fetch user data from the backend
+        // Fetch user data
         async function fetchUserData() {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -295,19 +300,55 @@
                 }
                 const data = await response.json();
 
-                // Update the profile with user data
+                // Update profile with user data
                 document.getElementById('username').textContent = data.username;
+                document.getElementById('join-date').textContent = `Lid sinds: ${new Date(data.join_date).toLocaleDateString('nl-NL', { month: 'long', year: 'numeric' })}`;
+                document.getElementById('location').textContent = `Locatie: ${data.location}`;
+                document.getElementById('bio').textContent = data.bio;
+                document.getElementById('opleiding').textContent = data.education;
+                document.getElementById('favoriete-game').textContent = data.favorite_game;
+                document.getElementById('email').textContent = data.email;
                 document.getElementById('streak').textContent = `${data.streak} dagen`;
 
-                // Calculate total points and games played
                 const totalPoints = data.games.reduce((sum, game) => sum + game.score, 0);
                 const gamesPlayed = data.games.length;
                 document.getElementById('totaal-punten').textContent = `${totalPoints} XP`;
                 document.getElementById('gespeelde-games').textContent = gamesPlayed;
 
-                // Find the highest score
                 const highestScoreGame = data.games.reduce((max, game) => game.score > max.score ? game : max, data.games[0]);
                 document.getElementById('hoogste-score').textContent = `${highestScoreGame.score} XP (${highestScoreGame.game_name})`;
+
+                // Update badges
+                const badgesGrid = document.getElementById('badges-grid');
+                badgesGrid.innerHTML = '';
+                data.badges.forEach(badge => {
+                    const div = document.createElement('div');
+                    div.className = 'badge';
+                    div.innerHTML = `<i class="fas fa-award"></i><p>${badge}</p>`;
+                    badgesGrid.appendChild(div);
+                });
+
+                // Update activities
+                const activityList = document.getElementById('activity-list');
+                activityList.innerHTML = '';
+                data.activities.forEach(activity => {
+                    const li = document.createElement('li');
+                    const timeDiff = Math.round((new Date() - new Date(activity.timestamp)) / (1000 * 60 * 60 * 24));
+                    const timeText = timeDiff === 0 ? 'Vandaag' : timeDiff === 1 ? 'Gisteren' : `${timeDiff} dagen geleden`;
+                    li.innerHTML = `<i class="fas fa-check-circle"></i> ${activity.text} (${timeText})`;
+                    activityList.appendChild(li);
+                });
+
+                // Update friends
+                document.getElementById('friend-count').textContent = data.friend_count;
+                const friendsGrid = document.getElementById('friends-grid');
+                friendsGrid.innerHTML = '';
+                data.friends.forEach(friend => {
+                    const div = document.createElement('div');
+                    div.className = 'friend';
+                    div.innerHTML = `<i class="fas fa-user"></i><p>${friend}</p>`;
+                    friendsGrid.appendChild(div);
+                });
             } catch (error) {
                 console.error('Error fetching user data:', error);
                 alert('Failed to load profile data. Please try again later.');
