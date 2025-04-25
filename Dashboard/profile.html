@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduStreakz Profiel</title>
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body id="page-body">
+    <!-- Topnavigatie -->
+    <nav class="top-nav">
+        <div class="nav-logo">
+            <h2>EduStreakz</h2>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html"><i class="fas fa-arrow-left"></i> Terug naar Dashboard</a>
+            <a href="#" class="active"><i class="fas fa-user"></i> Profiel</a>
+            <a href="gamePage/game1.html"><i class="fas fa-calculator"></i> Wiskunde Avontuur</a>
+            <a href="gamePage/game2.html"><i class="fas fa-flask"></i> Wetenschap Quest</a>
+            <a href="gamePage/game3.html"><i class="fas fa-brain"></i> Algemene Kennis Bingo</a>
+        </div>
+    </nav>
+
+    <!-- Hoofdinhoud -->
+    <main class="profile-content">
+        <!-- Profielheader met coverfoto en profielfoto -->
+        <section class="profile-header">
+            <div class="cover-photo"></div>
+            <div class="profile-info">
+                <div class="profile-pic" id="profile-pic">
+                    <img id="profile-pic-img" src="" alt="Profielfoto" style="display: none;" />
+                    <i id="profile-pic-icon" class="fas fa-user-circle"></i>
+                    <!-- Verborgen input voor foto-upload -->
+                    <input type="file" id="profile-pic-upload" accept="image/*" style="display: none;" />
+                </div>
+                <div class="profile-details">
+                    <h1>Speler Naam</h1>
+                    <p>Lid sinds: April 2024</p>
+                    <p>Locatie: Amsterdam, Nederland</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profielinhoud -->
+        <div class="profile-grid">
+            <!-- Linkerkolom: Persoonlijke info en statistieken -->
+            <div class="profile-left">
+                <section class="info-section">
+                    <h2>Over Mij</h2>
+                    <p>
+                        <i class="fas fa-info-circle"></i>
+                        <strong class="editable" data-field="bio">Bio:</strong>
+                        <span id="bio">Ik ben een enthousiaste leerling die houdt van wiskunde en wetenschap!</span>
+                    </p>
+                    <p>
+                        <i class="fas fa-graduation-cap"></i>
+                        <strong class="editable" data-field="opleiding">Opleiding:</strong>
+                        <span id="opleiding">Middelbare school, 3e jaar</span>
+                    </p>
+                    <p>
+                        <i class="fas fa-star"></i>
+                        <strong class="editable" data-field="favoriete-game">Favoriete Game:</strong>
+                        <span id="favoriete-game">Wiskunde Avontuur</span>
+                    </p>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        <strong class="editable" data-field="email">E-mail:</strong>
+                        <span id="email">speler@example.com</span>
+                    </p>
+                </section>
+
+                <section class="stats-section">
+                    <h2>Statistieken</h2>
+                    <p>
+                        <i class="fas fa-calendar-alt"></i>
+                        <strong>Streak:</strong>
+                        <span id="streak">15 dagen</span>
+                    </p>
+                    <p>
+                        <i class="fas fa-trophy"></i>
+                        <strong>Totaal Punten:</strong>
+                        <span id="totaal-punten">1200 XP</span>
+                    </p>
+                    <p>
+                        <i class="fas fa-gamepad"></i>
+                        <strong>Gespeelde Games:</strong>
+                        <span id="gespeelde-games">8</span>
+                    </p>
+                    <p>
+                        <i class="fas fa-medal"></i>
+                        <strong>Hoogste Score:</strong>
+                        <span id="hoogste-score">150 XP (Wetenschap Quest)</span>
+                    </p>
+                </section>
+
+                <section class="badges-section">
+                    <h2>Vrijgespeelde Badges</h2>
+                    <div class="badges-grid">
+                        <div class="badge">
+                            <i class="fas fa-award"></i>
+                            <p>Beginner</p>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-award"></i>
+                            <p>Expert</p>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-award"></i>
+                            <p>Overwinnaar</p>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-award"></i>
+                            <p>Streak Master</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Rechterkolom: Recente activiteiten en vrienden -->
+            <div class="profile-right">
+                <section class="activity-section">
+                    <h2>Recente Activiteiten</h2>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Wiskunde Avontuur gespeeld - 50 XP verdiend (2 uur geleden)</li>
+                        <li><i class="fas fa-check-circle"></i> Wetenschap Quest voltooid - 75 XP verdiend (Gisteren)</li>
+                        <li><i class="fas fa-check-circle"></i> Nieuwe badge verdiend: "Expert" (3 dagen geleden)</li>
+                        <li><i class="fas fa-check-circle"></i> Algemene Kennis Bingo gespeeld - 30 XP verdiend (5 dagen geleden)</li>
+                    </ul>
+                </section>
+
+                <section class="friends-section">
+                    <h2>Vrienden & Community</h2>
+                    <p><i class="fas fa-users"></i> <strong>Aantal Vrienden:</strong> 12</p>
+                    <div class="friends-grid">
+                        <div class="friend">
+                            <i class="fas fa-user"></i>
+                            <p>Sophie</p>
+                        </div>
+                        <div class="friend">
+                            <i class="fas fa-user"></i>
+                            <p>Mark</p>
+                        </div>
+                        <div class="friend">
+                            <i class="fas fa-user"></i>
+                            <p>Lisa</p>
+                        </div>
+                        <div class="friend">
+                            <i class="fas fa-user"></i>
+                            <p>Alex</p>
+                        </div>
+                    </div>
+                    <a href="#" class="btn">Bekijk Alle Vrienden</a>
+                </section>
+            </div>
+        </div>
+
+        <!-- Modal voor bewerken -->
+        <div id="edit-modal" class="modal">
+            <div class="modal-content">
+                <h3 id="modal-title">Veld aanpassen</h3>
+                <input type="text" id="modal-input" placeholder="Voer de nieuwe waarde in..." />
+                <div class="modal-buttons">
+                    <button id="modal-ok" class="modal-btn modal-btn-ok">OK</button>
+                    <button id="modal-cancel" class="modal-btn modal-btn-cancel">Annuleren</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal voor profielfoto-opties -->
+        <div id="profile-pic-modal" class="modal">
+            <div class="modal-content">
+                <h3>Profielfoto aanpassen</h3>
+                <div class="modal-buttons">
+                    <button id="profile-pic-choose" class="modal-btn modal-btn-ok">Foto kiezen</button>
+                    <button id="profile-pic-remove" class="modal-btn modal-btn-remove">Foto verwijderen</button>
+                    <button id="profile-pic-cancel" class="modal-btn modal-btn-cancel">Annuleren</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© Rechten voorbehouden aan team04 1ITF01 ThomasMore 2024-2025</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="profile.js"></script>
+</body>
+</html>

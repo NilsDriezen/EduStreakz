@@ -1,0 +1,206 @@
+/* Definieer kleurvariabelen */
+:root {
+    --background-color: #1e3a8a; /* Donkerblauwe achtergrond */
+    --wave-color: #2b4a9b; /* Iets donkerdere blauwe tint voor de golven */
+    --container-bg: #2d4b9b; /* Achtergrond van de login container */
+    --text-color: #ffffff; /* Witte tekstkleur */
+    --input-bg: #4b6cb7; /* Achtergrond van invoervelden */
+    --button-bg: #3b82f6; /* Blauwe knopkleur */
+    --button-hover-bg: #2563eb; /* Knopkleur bij hover */
+    --link-color: #93c5fd; /* Kleur van links */
+    --input-border: #60a5fa; /* Blauwe rand voor invoervelden */
+    --error-color: #f87171; /* Rood voor foutmeldingen */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--background-color);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Statische golven achtergrond met ronde vormen */
+.wave-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: var(--wave-color);
+    opacity: 0.6;
+    clip-path: ellipse(70% 40% at 50% 100%);
+}
+
+.wave2 {
+    height: 60%;
+    opacity: 0.4;
+    clip-path: ellipse(80% 50% at 50% 100%);
+}
+
+.login-container {
+    background: var(--container-bg);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.login-container h2 {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    position: relative;
+}
+
+#signup-form h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: var(--button-bg);
+    border-radius: 2px;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--input-border);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#signup-form .input-group input:focus + label,
+#signup-form .input-group input:not(:placeholder-shown) + label {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.date-group .date-inputs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.date-group input {
+    width: 33.33%;
+    text-align: center;
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    display: block;
+    text-align: center;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.checkbox-group input {
+    margin-right: 0.5rem;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--button-bg);
+    border: none;
+    border-radius: 5px;
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.login-btn:hover {
+    background: var(--button-hover-bg);
+    transform: scale(1.05);
+}
+
+.forgot-password {
+    display: block;
+    margin: 1rem 0;
+    color: var(--link-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.signup-text {
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.signup-text a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.signup-text a:hover {
+    text-decoration: underline;
+}

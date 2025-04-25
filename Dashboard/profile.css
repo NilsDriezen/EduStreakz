@@ -1,0 +1,408 @@
+/* Algemene styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F5F7FA; /* Lichtgrijs achtergrond */
+    color: #1B263B; /* Donkerblauw voor tekst */
+    opacity: 0; /* Start onzichtbaar voor fade-in */
+    animation: fadeIn 0.5s ease-in forwards; /* Fade-in animatie bij laden */
+}
+
+/* Fade-in animatie */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Fade-out animatie (wordt geactiveerd via JavaScript) */
+.fade-out {
+    opacity: 1;
+    animation: fadeOut 0.5s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Topnavigatie */
+.top-nav {
+    background-color: #1B263B; /* Donkerblauw */
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-logo h2 {
+    font-size: 24px;
+    color: #E0E7EF; /* Lichtblauw voor het logo */
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.nav-links a i {
+    margin-right: 10px;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    background-color: #415A77; /* Middelblauw bij hover/actief */
+}
+
+/* Hoofdinhoud */
+.profile-content {
+    padding: 30px;
+}
+
+/* Profielheader */
+.profile-header {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.cover-photo {
+    height: 200px;
+    background-color: #415A77; /* Middelblauw als placeholder voor coverfoto */
+    border-radius: 10px 10px 0 0;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    background-color: #E0E7EF; /* Lichtblauw */
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+    position: relative;
+    top: -50px;
+}
+
+.profile-pic {
+    width: 120px;
+    height: 120px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    border: 4px solid #F5F7FA;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden; /* Zorgt dat de afbeelding niet buiten de cirkel komt */
+}
+
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Zorgt dat de afbeelding de hele cirkel vult */
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.profile-pic i {
+    font-size: 80px;
+    color: #778DA9; /* Grijsblauw accent */
+}
+
+.profile-details h1 {
+    font-size: 28px;
+    color: #1B263B;
+    margin-bottom: 5px;
+}
+
+.profile-details p {
+    font-size: 14px;
+    color: #415A77;
+}
+
+/* Profielgrid */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+}
+
+/* Linkerkolom */
+.profile-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-section, .stats-section, .badges-section {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-section h2, .stats-section h2, .badges-section h2 {
+    font-size: 20px;
+    color: #1B263B;
+    margin-bottom: 15px;
+}
+
+.info-section p, .stats-section p {
+    font-size: 14px;
+    color: #415A77;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.info-section i, .stats-section i {
+    margin-right: 10px;
+    color: #778DA9;
+}
+
+/* Klikbare titels (alleen in "Over Mij") */
+.editable {
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.editable:hover {
+    color: #1B263B; /* Donkerblauw bij hover */
+}
+
+/* Meer ruimte na de dubbele punt */
+.info-section p span, .stats-section p span {
+    margin-left: 5px;
+}
+
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.badge {
+    text-align: center;
+}
+
+.badge i {
+    font-size: 30px;
+    color: #778DA9;
+    margin-bottom: 5px;
+}
+
+.badge p {
+    font-size: 12px;
+    color: #1B263B;
+}
+
+/* Rechterkolom */
+.profile-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.activity-section, .friends-section {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.activity-section h2, .friends-section h2 {
+    font-size: 20px;
+    color: #1B263B;
+    margin-bottom: 15px;
+}
+
+.activity-section ul {
+    list-style: none;
+}
+
+.activity-section ul li {
+    font-size: 14px;
+    color: #415A77;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.activity-section ul li i {
+    margin-right: 10px;
+    color: #778DA9;
+}
+
+.friends-section p {
+    font-size: 14px;
+    color: #415A77;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.friends-section p i {
+    margin-right: 10px;
+    color: #778DA9;
+}
+
+.friends-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.friend {
+    text-align: center;
+}
+
+.friend i {
+    font-size: 30px;
+    color: #778DA9;
+    margin-bottom: 5px;
+}
+
+.friend p {
+    font-size: 12px;
+    color: #1B263B;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #778DA9; /* Grijsblauw accent */
+    color: #FFFFFF;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #1B263B; /* Donkerblauw bij hover */
+}
+
+/* Modal voor bewerken */
+.modal {
+    display: none; /* Standaard verborgen */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparante achtergrond */
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #E0E7EF; /* Lichtblauw */
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+    font-size: 18px;
+    color: #1B263B;
+    margin-bottom: 15px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #415A77;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #1B263B;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap; /* Voor responsiviteit */
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+    flex: 1; /* Zorgt dat knoppen gelijk verdeeld worden */
+    max-width: 150px; /* Beperkt de breedte van knoppen */
+}
+
+.modal-btn-ok {
+    background-color: #415A77; /* Middelblauw */
+    color: #FFFFFF;
+}
+
+.modal-btn-ok:hover {
+    background-color: #1B263B; /* Donkerblauw */
+}
+
+.modal-btn-remove {
+    background-color: #778DA9; /* Grijsblauw */
+    color: #FFFFFF;
+}
+
+.modal-btn-remove:hover {
+    background-color: #415A77; /* Middelblauw */
+}
+
+.modal-btn-cancel {
+    background-color: #778DA9; /* Grijsblauw */
+    color: #FFFFFF;
+}
+
+.modal-btn-cancel:hover {
+    background-color: #415A77; /* Middelblauw */
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #1B263B;
+    color: #FFFFFF;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

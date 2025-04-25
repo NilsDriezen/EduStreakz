@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inlogpagina</title>
+    <link rel="stylesheet" href="InlogEnRegistreer.css">
+</head>
+<body>
+    <div class="wave-background">
+        <div class="wave"></div>
+        <div class="wave wave2"></div>
+    </div>
+    <div class="login-container" id="login-form">
+        <h2>Login</h2>
+        <form>
+            <div class="input-group">
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="remember-me" name="remember-me">
+                <label for="remember-me">Remember me</label>
+            </div>
+            <button type="submit" class="login-btn">LOGIN</button>
+            <a href="#" class="forgot-password">Forgot your password?</a>
+        </form>
+        <p class="signup-text">New here? <a href="#" id="show-signup">Sign Up</a></p>
+    </div>
+
+    <div class="login-container" id="signup-form" style="display: none;">
+        <h2>Sign Up</h2>
+        <form id="signupForm" onsubmit="return validateForm()">
+            <div class="input-group">
+                <label for="signup-username">Username</label>
+                <input type="text" id="signup-username" name="signup-username" placeholder="Enter your username" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-group date-group">
+                <label>Birth Date</label>
+                <div class="date-inputs">
+                    <input type="number" id="birth-day" name="birth-day" placeholder="DD" min="1" max="31" required>
+                    <input type="number" id="birth-month" name="birth-month" placeholder="MM" min="1" max="12" required>
+                    <input type="number" id="birth-year" name="birth-year" placeholder="YYYY" min="1900" max="2025" required>
+                </div>
+                <span id="date-error" class="error-message"></span>
+            </div>
+            <div class="input-group">
+                <label for="signup-password">Password</label>
+                <input type="password" id="signup-password" name="signup-password" placeholder="Enter your password" required>
+            </div>
+            <div class="input-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="robot-check" name="robot-check" required>
+                <label for="robot-check">I am not a robot</label>
+            </div>
+            <button type="submit" class="login-btn">SIGN UP</button>
+        </form>
+        <p class="signup-text">Already have an account? <a href="#" id="show-login">Login</a></p>
+    </div>
+
+    <script src="InlogEnRegistreer.js"></script>
+</body>
+</html>

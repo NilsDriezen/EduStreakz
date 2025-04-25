@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduStreakz Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body id="page-body">
+    <div class="dashboard-container">
+        <!-- Zijbalk voor navigatie -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EduStreakz</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="gamePage/game1.html"><i class="fas fa-calculator"></i> Wiskunde Avontuur</a></li>
+                    <li><a href="gamePage/game2.html"><i class="fas fa-flask"></i> Wetenschap Quest</a></li>
+                    <li><a href="gamePage/game3.html"><i class="fas fa-brain"></i> Algemene Kennis Bingo</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Hoofdinhoud -->
+        <main class="main-content">
+            <!-- Header met profiel -->
+            <header class="dashboard-header">
+                <div class="header-title">
+                    <h1>Welkom, speler!</h1>
+                    <p>Mooi dat je weer terug bent! Blijf je streak volhouden en blijf leren.</p>
+                </div>
+                <a href="profile.html" class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span>15 dagen streak</span>
+                </a>
+            </header>
+
+            <!-- Voortgang sectie -->
+            <section class="progress-section">
+                <h2>Jouw Voortgang</h2>
+                <div class="progress-cards">
+                    <div class="progress-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Streak</h3>
+                        <p>Je bent al <span class="highlight">15</span> dagen achter elkaar aan het leren!</p>
+                    </div>
+                    <div class="progress-card">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Totaal Punten</h3>
+                        <p><span class="highlight">1200</span> XP</p>
+                    </div>
+                    <div class="progress-card">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>Gespeelde Games</h3>
+                        <p><span class="highlight">8</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Games sectie -->
+            <section class="games-section">
+                <h2>Beschikbare Games</h2>
+                <p>Klaar om te spelen? Kies een game en leer iets nieuws!</p>
+                <div class="games-grid">
+                    <div class="game-card">
+                        <h3>Wiskunde Avontuur</h3>
+                        <p>Oefen je rekenvaardigheden in een spannende omgeving!</p>
+                        <a href="#" class="btn">Speel nu</a>
+                    </div>
+                    <div class="game-card">
+                        <h3>Wetenschap Quest</h3>
+                        <p>Ontdek de geheimen van de natuurkunde en chemie.</p>
+                        <a href="#" class="btn">Speel nu</a>
+                    </div>
+                    <div class="game-card">
+                        <h3>Algemene Kennis Bingo</h3>
+                        <p>Test je kennis in een interactieve bingo-setup!</p>
+                        <a href="#" class="btn">Speel nu</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Leaderboard en Beloningen -->
+            <div class="bottom-sections">
+                <section class="leaderboard-section">
+                    <h2>Leaderboard</h2>
+                    <p>Wie heeft deze week de hoogste score?</p>
+                    <ul>
+                        <li><i class="fas fa-medal"></i> <span class="highlight">Sophie</span> - 1500 XP</li>
+                        <li><i class="fas fa-medal"></i> <span class="highlight">Mark</span> - 1365 XP</li>
+                        <li><i class="fas fa-medal"></i> <span class="highlight">Lisa</span> - 1200 XP</li>
+                    </ul>
+                </section>
+
+                <section class="rewards-section">
+                    <h2>Beloningen en Doelen</h2>
+                    <p><i class="fas fa-bullseye"></i> <span class="highlight">Jouw volgende doel</span>: Speel 20 dagen achter elkaar om een speciale beloning te verdienen!</p>
+                    <p><i class="fas fa-unlock"></i> <span class="highlight">Vrijgespeelde badges</span>: 10 badges - inclusief 'Beginner', 'Expert' en 'Overwinnaar'</p>
+                </section>
+            </div>
+
+            <!-- Community & Support -->
+            <section class="community-section">
+                <h2>Community & Support</h2>
+                <p><i class="fas fa-comments"></i> <span class="highlight">Praat mee</span> in onze community en deel je voortgang!</p>
+                <p><i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig?</span> Neem contact op via <a href="mailto:support@edustreakz.com">support@edustreakz.com</a></p>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© Rechten voorbehouden aan team04 1ITF01 ThomasMore 2024-2025</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="dashboard.js"></script>
+</body>
+</html>
