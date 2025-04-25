@@ -13,7 +13,7 @@
     </div>
     <div class="login-container" id="login-form">
         <h2>Login</h2>
-        <form>
+        <form id="loginForm">
             <div class="input-group">
                 <input type="text" id="username" name="username" placeholder="Username" required>
             </div>
@@ -32,7 +32,7 @@
 
     <div class="login-container" id="signup-form" style="display: none;">
         <h2>Sign Up</h2>
-        <form id="signupForm" onsubmit="return validateForm()">
+        <form id="signupForm">
             <div class="input-group">
                 <label for="signup-username">Username</label>
                 <input type="text" id="signup-username" name="signup-username" placeholder="Enter your username" required>
@@ -68,5 +68,141 @@
     </div>
 
     <script src="InlogEnRegistreer.js"></script>
+    <script>
+        // Wisselen tussen formulieren (from InlogEnRegistreer.js)
+        document.getElementById('show-signup').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'block';
+        });
+
+        document.getElementById('show-login').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        });
+
+        // Validatie van het registratieformulier (from InlogEnRegistreer.js)
+        function validateForm() {
+            const day = document.getElementById('birth-day').value;
+            const month = document.getElementById('birth-month').value;
+            const year = document.getElementById('birth-year').value;
+            const dateError = document.getElementById('date-error');
+
+            // Reset foutmelding
+            dateError.textContent = '';
+
+            // Controleer dag (1-31, max 2 cijfers)
+            if (!day || day < 1 || day > 31 || day.length > 2) {
+                dateError.textContent = 'Day must be between 1 and 31 and max 2 digits.';
+                return false;
+            }
+
+            // Controleer maand (1-12, max 2 cijfers)
+            if (!month || month < 1 || month > 12 || month.length > 2) {
+                dateError.textContent = 'Month must be between 1 and 12 and max 2 digits.';
+                return false;
+            }
+
+            // Controleer jaar (1900-2025, exact 4 cijfers)
+            if (!year || year < 1900 || year > 2025 || year.length !== 4) {
+                dateError.textContent = 'Year must be between 1900 and 2025 and exactly 4 digits.';
+                return false;
+            }
+
+            return true; // Formulier is geldig
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('https://edu-streakz-backend.vercel.app/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+                localStorage.setItem('token', data.token);
+                window.location.href = '/dashboard.html';
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert(error.message || 'Login failed. Please check your credentials.');
+            }
+        });
+
+        // Handle signup form submission
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Validate the form
+            if (!validateForm()) {
+                return;
+            }
+
+            const username = document.getElementById('signup-username').value;
+            const email = document.getElementById('email').value;
+            const birthDay = document.getElementById('birth-day').value;
+            const birthMonth = document.getElementById('birth-month').value;
+            const birthYear = document.getElementById('birth-year').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Additional validation: check if passwords match
+            if (password !== confirmPassword) {
+                document.getElementById('date-error').textContent = 'Passwords do not match.';
+                return;
+            }
+
+            try {
+                // Sign up the user
+                const signupResponse = await fetch('https://edu-streakz-backend.vercel.app/api/auth/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        birthDay,
+                        birthMonth,
+                        birthYear,
+                        password
+                    })
+                });
+                const signupData = await signupResponse.json();
+                if (!signupResponse.ok) {
+                    throw new Error(signupData.error || 'Signup failed');
+                }
+
+                // Automatically log in the user after signup
+                const loginResponse = await fetch('https://edu-streakz-backend.vercel.app/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                const loginData = await loginResponse.json();
+                if (!loginResponse.ok) {
+                    throw new Error(loginData.error || 'Login after signup failed');
+                }
+
+                localStorage.setItem('token', loginData.token);
+                window.location.href = '/dashboard.html';
+            } catch (error) {
+                console.error('Error during signup:', error);
+                document.getElementById('date-error').textContent = error.message || 'Signup failed. Please try again.';
+            }
+        });
+    </script>
 </body>
 </html>
