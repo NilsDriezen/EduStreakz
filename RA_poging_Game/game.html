@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Speed, Distance & Time Game</title>
+  <link rel="stylesheet" href="game.css">
+</head>
+<body>
+<div id="game-container" aria-live="polite" aria-atomic="true">
+  <h1>Speed, Distance & Time Game</h1>
+  <p>Use the formula: <br><strong>speed (v) = distance (Δx) / time (Δt)</strong></p>
+
+  <div class="problem" id="problem-text" role="figure" aria-label="Current problem"></div>
+
+  <label for="answer-input" id="answer-label"></label><br />
+  <input type="number" id="answer-input" step="any" aria-required="true" aria-describedby="unit" />
+  <div class="unit-info" id="unit" aria-live="polite"></div>
+
+  <div>
+    <button id="check-btn" aria-live="polite">Check Answer</button>
+    <button id="new-problem-btn">New Problem</button>
+  </div>
+
+  <div id="timer-bar-container" aria-label="Time remaining">
+    <div id="timer-bar"></div>
+  </div>
+
+  <div id="feedback" aria-live="assertive" aria-atomic="true"></div>
+  <div id="scoreboard" aria-live="polite" aria-atomic="true">Score: 0 | Attempts: 0 | Streak: 0 | High Score: 0</div>
+
+  <div class="footer">
+    Enter your answer rounded to one decimal if needed.<br />
+    You have 20 seconds per question. Good luck!
+  </div>
+</div>
+
+<script src="poging.js"></script>
+</body>
+</html>
