@@ -1,5 +1,5 @@
 (() => {
-    // Game variables
+    // Game variabelen
     let score = 0;
     let attempts = 0;
     let streak = 0;
@@ -9,7 +9,7 @@
     const questionTime = 20; // seconds
     let timeLeft = questionTime;
 
-    // DOM Elements
+    // DOM Elementen
     const problemText = document.getElementById('problem-text');
     const answerInput = document.getElementById('answer-input');
     const answerLabel = document.getElementById('answer-label');
@@ -21,7 +21,7 @@
     const timerBar = document.getElementById('timer-bar');
     const gameContainer = document.getElementById('game-container');
 
-    // Play confetti animation on correct answer
+
     function showConfetti() {
         for (let i = 0; i < 30; i++) {
             const confetti = document.createElement('div');
@@ -36,7 +36,7 @@
         }
     }
 
-    // Load high score from localStorage
+    //
     function loadHighScore() {
         const storedHigh = localStorage.getItem('sdtGameHighScore');
         if(storedHigh !== null) {
@@ -44,7 +44,7 @@
         }
     }
 
-    // Save high score to localStorage
+    //
     function saveHighScore() {
         if(score > highScore) {
             highScore = score;
@@ -52,26 +52,24 @@
         }
     }
 
-    // Update scoreboard text
+    //  scoreboard
     function updateScoreboard() {
         saveHighScore();
         scoreboard.textContent = `Score: ${score} | Attempts: ${attempts} | Streak: ${streak} | High Score: ${highScore}`;
     }
 
-    // Generate a random integer between min and max inclusive
+
     function randomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    // Generate a random float with 1 decimal place (used selectively)
+    // random float
     function randomFloat1(min, max) {
         const val = Math.random() * (max - min) + min;
         return Math.round(val * 10) / 10;
     }
 
-    // Generate a problem with simpler numbers
-    // Possible unknowns: 'v' (speed), 't' (time), 'x' (distance)
-    // Use integers or one decimal max for simplicity
+
     function generateProblem() {
         clearInterval(timerInterval);
         timeLeft = questionTime;
@@ -82,21 +80,21 @@
         answerInput.disabled = false;
         checkBtn.disabled = false;
 
-        // Which value to find
+
         const findOption = ['v', 't', 'x'];
         const find = findOption[randomInt(0, 2)];
 
         let v, t, x;
         switch(find) {
             case 'v':
-                // distance 50-500 integer, time 5-60 integer
+
                 x = randomInt(50, 500);
                 t = randomInt(5, 60);
                 v = x / t;
                 v = Math.round(v * 10) / 10; // 1 decimal max
                 break;
             case 't':
-                // speed 1-20 decimal, distance 50-500 integer
+
                 v = randomFloat1(1, 20);
                 x = randomInt(50, 500);
                 t = x / v;
@@ -111,13 +109,13 @@
                 break;
         }
 
-        // Round answers to match above
+
         let answer;
         if(find === 'v') answer = v;
         else if(find === 't') answer = t;
         else answer = x;
 
-        // Problem description + input label + units
+
         let problemStr = '';
         let labelStr = '';
         let unitStr = '';
@@ -145,7 +143,7 @@
         startTimer();
     }
 
-    // Update timer bar width
+    // bar
     function updateTimerBar() {
         const pct = (timeLeft / questionTime) * 100;
         timerBar.style.width = pct + '%';
@@ -155,7 +153,7 @@
         timerBar.style.backgroundColor = `rgb(${red},${green},0)`;
     }
 
-    // Timer countdown function
+    // Timer
     function startTimer() {
         clearInterval(timerInterval);
         timeLeft = questionTime;
@@ -174,7 +172,7 @@
         }, 100);
     }
 
-    // When time runs out
+    // beperkt de tijd
     function timeOut() {
         feedback.style.color = 'orange';
         feedback.textContent = 'Time up! The correct answer was: ' + currentProblem.answer;
@@ -185,7 +183,7 @@
         checkBtn.disabled = true;
     }
 
-    // Check user answer
+    // antwoord nakijken
     function checkAnswer() {
         const inputVal = parseFloat(answerInput.value);
         if(isNaN(inputVal)) {
@@ -193,12 +191,12 @@
             feedback.textContent = 'Please enter a valid number.';
             return;
         }
-        // Round user's input to 1 decimal for test (match problem format)
+        // afronden tot 1decimaal
         const userAnswer = Math.round(inputVal * 10) / 10;
         attempts++;
 
         if(Math.abs(userAnswer - currentProblem.answer) < 0.1) {
-            // Correct answer
+
             score++;
             streak++;
             feedback.style.color = '#80ff80';
@@ -208,7 +206,7 @@
             checkBtn.disabled = true;
             clearInterval(timerInterval);
         } else {
-            // Incorrect answer
+
             streak = 0;
             feedback.style.color = '#ff9090';
             feedback.textContent = 'Incorrect. Try again!';
@@ -216,7 +214,7 @@
         updateScoreboard();
     }
 
-    // Event listeners
+
     checkBtn.addEventListener('click', () => {
         if(!answerInput.disabled) checkAnswer();
     });
@@ -225,7 +223,7 @@
         generateProblem();
     });
 
-    // Enter key triggers check answer unless disabled
+
     answerInput.addEventListener('keydown', (e) => {
         if(e.key === 'Enter' && !answerInput.disabled) {
             e.preventDefault();
@@ -233,7 +231,7 @@
         }
     });
 
-    // Initialize game on load
+
     loadHighScore();
     generateProblem();
     updateScoreboard();
