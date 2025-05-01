@@ -1,0 +1,62 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f8ff;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+#game-container {
+    max-width: 480px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #a0c4ff;
+    text-align: center;
+}
+h1 {
+    color: #064273;
+}
+.problem {
+    font-size: 1.3em;
+    margin: 20px 0;
+}
+label {
+    font-weight: bold;
+}
+input[type="number"] {
+    width: 100px;
+    padding: 8px;
+    margin-top: 10px;
+    font-size: 1em;
+}
+button {
+    padding: 10px 16px;
+    font-size: 1em;
+    margin: 15px 10px 0 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #0077b6;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background-color: #023e8a;
+}
+#feedback {
+    margin-top: 15px;
+    font-size: 1.2em;
+    min-height: 1.5em;
+}
+#scoreboard {
+    margin-top: 25px;
+    font-size: 1em;
+    color: #03045e;
+}
+.footer {
+    margin-top: 30px;
+    font-size: 0.85em;
+    color: #666;
+}

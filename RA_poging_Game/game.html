@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Speed, Distance & Time Educational Game</title>
+  <link rel="stylesheet" href="game.css">
+</head>
+<body>
+<div id="game-container">
+  <h1>Speed, Distance & Time Game</h1>
+  <p>Calculate the missing value using the formula:<br>
+    <strong>speed (v) = distance (Δx) / time (Δt)</strong></p>
+
+  <div class="problem" id="problem-text"></div>
+
+  <label for="answer-input" id="answer-label"></label><br>
+  <input type="number" id="answer-input" step="any" />
+  <div id="unit" style="margin-top: 5px; font-style: italic; color: #555;"></div>
+
+  <div>
+    <button id="check-btn">Check Answer</button>
+    <button id="new-problem-btn">New Problem</button>
+  </div>
+
+  <div id="feedback"></div>
+  <div id="scoreboard">Score: 0 | Attempts: 0</div>
+
+  <div class="footer">
+    Enter your answer rounded to two decimals where needed.<br>
+    Refresh the page to reset the game.
+  </div>
+</div>
+
+<script src="poging.js"></script>
+</body>
+</html>
