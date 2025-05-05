@@ -4,7 +4,7 @@ const config = {
     height: 600,
     physics: {
         default: 'arcade',
-        arcade: { gravity: { y: 300 }, debug: false } // Zwaartekracht verlaagd voor betere sprong
+        arcade: { gravity: { y: 300 }, debug: false }
     },
     scene: { preload, create, update },
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH }
@@ -15,9 +15,9 @@ const game = new Phaser.Game(config);
 let player, platforms, coins, obstacles, cursors, answerInput, questionText, feedbackText, scoreText, livesText, timerText;
 let score = 0, lives = 3, timeLeft = 120, level = 1;
 let currentQuestion = null, isAnswering = false;
-const JWT_TOKEN = localStorage.getItem('jwtToken'); // Verkregen via login op edu-streakz
 
 function preload() {
+    console.log('Preloading assets...');
     this.load.image('player', 'https://labs.phaser.io/assets/sprites/phaser-dude.png');
     this.load.image('coin', 'https://labs.phaser.io/assets/sprites/orb-blue.png');
     this.load.image('obstacle', 'https://labs.phaser.io/assets/sprites/spike.png');
@@ -25,20 +25,17 @@ function preload() {
 }
 
 function create() {
-    // Achtergrond
+    console.log('Creating game scene...');
     this.add.rectangle(400, 300, 800, 600, 0x87CEEB);
 
-    // Platformen (hoogtes aangepast voor betere bereikbaarheid)
     platforms = this.physics.add.staticGroup();
     platforms.create(400, 580, 'ground').setScale(2).refreshBody();
-    platforms.create(200, 450, 'ground'); // Iets lager
-    platforms.create(600, 350, 'ground'); // Iets lager
+    platforms.create(200, 450, 'ground');
+    platforms.create(600, 350, 'ground');
 
-    // Speler
     player = this.physics.add.sprite(100, 450, 'player').setBounce(0.2).setCollideWorldBounds(true);
     this.physics.add.collider(player, platforms);
 
-    // Munten (wiskunde-vragen)
     coins = this.physics.add.group({
         key: 'coin',
         repeat: 5,
@@ -48,23 +45,20 @@ function create() {
     this.physics.add.collider(coins, platforms);
     this.physics.add.overlap(player, coins, collectCoin, null, this);
 
-    // Obstakels
     obstacles = this.physics.add.group();
     obstacles.create(700, 550, 'obstacle').setVelocityX(-100);
     this.physics.add.collider(obstacles, platforms);
     this.physics.add.collider(player, obstacles, hitObstacle, null, this);
 
-    // UI
     scoreText = this.add.text(16, 16, 'Score: 0', { font: '24px Arial', fill: '#000' });
     livesText = this.add.text(16, 50, 'Levens: 3', { font: '24px Arial', fill: '#000' });
     timerText = this.add.text(16, 84, 'Tijd: 120', { font: '24px Arial', fill: '#000' });
     questionText = this.add.text(400, 200, '', { font: '32px Arial', fill: '#000', align: 'center' }).setOrigin(0.5).setDepth(10);
     feedbackText = this.add.text(400, 500, '', { font: '24px Arial', fill: '#000', align: 'center' }).setOrigin(0.5).setDepth(10);
 
-    // Input
     cursors = this.input.keyboard.createCursorKeys();
     answerInput = document.getElementById('answerInput');
-    answerInput.style.display = 'none'; // Zorg ervoor dat het standaard verborgen is
+    answerInput.style.display = 'none';
     answerInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && isAnswering) {
             console.log('Antwoord ingediend:', answerInput.value);
@@ -72,17 +66,15 @@ function create() {
         }
     });
 
-    // Timer
     this.time.addEvent({ delay: 1000, callback: updateTimer, callbackScope: this, loop: true });
 }
 
 function update() {
     if (isAnswering) {
-        player.setVelocityX(0); // Stop speler tijdens beantwoorden
+        player.setVelocityX(0);
         return;
     }
 
-    // Beweging speler
     if (cursors.left.isDown) {
         player.setVelocityX(-160);
     } else if (cursors.right.isDown) {
@@ -91,10 +83,9 @@ function update() {
         player.setVelocityX(0);
     }
     if (cursors.up.isDown && player.body.touching.down) {
-        player.setVelocityY(-400); // Hogere sprong
+        player.setVelocityY(-400);
     }
 
-    // Obstakel beweging
     obstacles.children.iterate(o => {
         if (o.x < 0) o.setX(800);
     });
@@ -211,18 +202,25 @@ function endGame(message) {
 }
 
 async function saveScore(score, level) {
-    if (!JWT_TOKEN) return console.error('Geen JWT token gevonden');
+    const token = localStorage.getItem('token');
+    console.log('Saving score:', { score, level, token: token ? 'Present' : 'Missing' });
+    if (!token) {
+        console.error('Geen token gevonden, speler moet inloggen');
+        return;
+    }
     try {
-        const response = await fetch('https://edu-streakz.vercel.app/api/games', {
+        const response = await fetch('https://edu-streakz-backend.vercel.app/api/games', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${JWT_TOKEN}`
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ game_name: 'Wiskunde Avontuur', score, level })
         });
-        if (!response.ok) throw new Error('Score opslaan mislukt');
-        console.log('Score opgeslagen');
+        if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}: ${await response.text()}`);
+        }
+        console.log('Score succesvol opgeslagen:', await response.json());
     } catch (err) {
         console.error('Fout bij opslaan score:', err);
     }
