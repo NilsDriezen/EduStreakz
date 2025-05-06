@@ -1,66 +1,176 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wiskunde Avontuur - EduStreakz</title>
-    <style>
-        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; }
-        canvas { max-width: 100%; max-height: 100%; }
-        #answerInput { 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            padding: 10px; 
-            font-size: 20px; 
-            display: none; 
-            z-index: 10; 
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.88.2/dist/phaser.min.js"></script>
 </head>
 <body>
-    <input type="number" id="answerInput" placeholder="Typ je antwoord">
-    <script src="game.js"></script>
+<header class="header">
+    <div class="logo">Edu<span>Streakz</span></div>
+    <nav class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Leerdoelen</a>
+        <a href="#">Voortgang</a>
+        <a href="#">Profiel</a>
+    </nav>
+</header>
+
+<div class="main-container">
+    <div class="game-container">
+        <div id="game-canvas"></div>
+        <input type="number" id="answerInput" placeholder="Typ je antwoord">
+    </div>
+
+    <div class="sidebar">
+        <div class="stats-card">
+            <h3 class="card-title">Jouw Statistieken</h3>
+            <div class="stat-item">
+                <span class="stat-label">Level:</span>
+                <span class="stat-value" id="level">5</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Score:</span>
+                <span class="stat-value" id="score">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Juiste antwoorden:</span>
+                <span class="stat-value" id="correct">0%</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Reeks:</span>
+                <span class="stat-value" id="streak">0</span>
+            </div>
+        </div>
+
+        <div class="instructions-card">
+            <h3 class="card-title">Speluitleg</h3>
+            <ul class="instructions-list">
+                <li>Beantwoord de wiskundevragen om punten te verdienen</li>
+                <li>Hoe sneller je antwoordt, hoe meer punten je krijgt</li>
+                <li>Maak een reeks van juiste antwoorden voor bonuspunten</li>
+                <li>Gebruik het invoerveld om je antwoord in te voeren</li>
+                <li>Druk op Enter om je antwoord te controleren</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    © 2023 EduStreakz - Alle rechten voorbehouden | <a href="#" style="color: var(--accent-color);">Privacybeleid</a> | <a href="#" style="color: var(--accent-color);">Gebruiksvoorwaarden</a>
+</footer>
+
+<script>
+    const config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 400,
+        parent: 'game-canvas',
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        },
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 300 },
+                debug: false
+            }
+        }
+    };
+
+    const game = new Phaser.Game(config);
+
+    let balls;
+    let ground;
+    let score = 0;
+    let lives = 3;
+    let timeElapsed = 0;
+    let correctAnswers = 0;
+    let totalAnswers = 0;
+    let streak = 0;
+    let currentQuestion;
+    let answerText;
+
+    function preload() {
+        this.load.image('ball', 'https://via.placeholder.com/50/0000FF/FFFFFF?text=O'); // Placeholder for ball
+        this.load.image('ground', 'https://via.placeholder.com/800x50/006400'); // Placeholder for ground
+    }
+
+    function create() {
+        ground = this.physics.add.staticGroup();
+        ground.create(400, 380, 'ground').setScale(1).refreshBody();
+
+        balls = this.physics.add.group({
+            key: 'ball',
+            repeat: 3,
+            setXY: { x: 100, y: 50, stepX: 150 }
+        });
+
+        this.physics.add.collider(balls, ground);
+
+        answerText = this.add.text(20, 20, 'Score: 0\nLevens: 3\nTijd: 0', {
+            fontSize: '20px',
+            fill: '#000'
+        });
+
+        generateQuestion.call(this);
+        setupInputListener();
+    }
+
+    function update(time, delta) {
+        timeElapsed += delta / 1000;
+        answerText.setText(`Score: ${score}\nLevens: ${lives}\nTijd: ${Math.floor(timeElapsed)}`);
+
+        updateStats();
+    }
+
+    function generateQuestion() {
+        const num1 = Math.floor(Math.random() * 10) + 1;
+        const num2 = Math.floor(Math.random() * 10) + 1;
+        currentQuestion = { num1, num2, answer: num1 + num2 };
+        answerText.setText(`Score: ${score}\nLevens: ${lives}\nTijd: ${Math.floor(timeElapsed)}\nVraag: ${num1} + ${num2} = ?`);
+    }
+
+    function setupInputListener() {
+        const answerInput = document.getElementById('answerInput');
+        answerInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const userAnswer = parseInt(answerInput.value);
+                checkAnswer.call(this, userAnswer);
+                answerInput.value = '';
+            }
+        });
+    }
+
+    function checkAnswer(userAnswer) {
+        totalAnswers++;
+        if (userAnswer === currentQuestion.answer) {
+            score += 10;
+            correctAnswers++;
+            streak++;
+            if (streak % 3 === 0) score += 20; // Bonus for streak
+        } else {
+            lives--;
+            streak = 0;
+            if (lives <= 0) {
+                this.scene.pause();
+                answerText.setText('Game Over!\nScore: ' + score);
+                return;
+            }
+        }
+        generateQuestion.call(this);
+    }
+
+    function updateStats() {
+        document.getElementById('score').innerText = score;
+        document.getElementById('level').innerText = Math.floor(score / 100) + 1;
+        document.getElementById('correct').innerText = totalAnswers > 0 ? Math.round((correctAnswers / totalAnswers) * 100) + '%' : '0%';
+        document.getElementById('streak').innerText = streak;
+    }
+</script>
 </body>
 </html>
