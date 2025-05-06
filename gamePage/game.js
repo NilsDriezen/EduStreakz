@@ -203,9 +203,9 @@ function resetLevel() {
 
 function endGame(message) {
     this.physics.pause();
-    feedbackText.setText(message);
+    feedbackText.setText(`${message}\nEindscore: ${score}`);
     saveScore(score, level);
-    this.time.delayedCall(3000, () => {
+    this.time.delayedCall(5000, () => {
         window.location.reload();
     });
 }
