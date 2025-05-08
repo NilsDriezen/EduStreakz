@@ -237,3 +237,80 @@
     updateScoreboard();
 
 })();
+// puntensysteem:
+
+// POST-verzoek
+async function checkAnswer() {
+    const inputVal = parseFloat(answerInput.value);
+    if (isNaN(inputVal)) {
+        feedback.style.color = '#ff8080';
+        feedback.textContent = 'Please enter a valid number.';
+        return;
+    }
+
+    const userAnswer = Math.round(inputVal * 10) / 10;
+    attempts++;
+
+    if (Math.abs(userAnswer - currentProblem.answer) < 0.1) {
+        score++;
+        streak++;
+        feedback.style.color = '#80ff80';
+        feedback.textContent = 'Correct! 🎉 Keep it up!';
+        showConfetti();
+        answerInput.disabled = true;
+        checkBtn.disabled = true;
+        clearInterval(timerInterval);
+        updateScoreboard();
+
+        // ✅ Post-verzoek naar backend om de punten op te slaan
+        try {
+            const response = await fetch('http://localhost:3000/api/scores', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Zorg dat je ingelogd bent!
+                },
+                body: JSON.stringify({
+                    game_name: "Speed, Distance & Time Game",
+                    score: 1,  // Elke correcte vraag is 1 punt
+                    level: streak // Je kan dit aanpassen op basis van de streak
+                })
+            });
+
+            if (!response.ok) {
+                console.error("Fout bij opslaan van de score:", await response.text());
+            }
+        } catch (error) {
+            console.error("Netwerkfout bij opslaan van de score:", error);
+        }
+    } else {
+        streak = 0;
+        feedback.style.color = '#ff9090';
+        feedback.textContent = 'Incorrect. Try again!';
+    }
+
+    updateScoreboard();
+}
+
+// Voorbeeld bij een login in je frontend
+// async function loginUser(username, password) {
+//     try {
+//         const response = await fetch('http://localhost:3000/api/auth/login', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({ username, password })
+//         });
+//
+//         if (response.ok) {
+//             const data = await response.json();
+//             localStorage.setItem('token', data.token); // ✅ JWT-token opslaan
+//             alert("Succesvol ingelogd!");
+//         } else {
+//             alert("Login mislukt.");
+//         }
+//     } catch (error) {
+//         console.error("Netwerkfout:", error);
+//     }
+// }
