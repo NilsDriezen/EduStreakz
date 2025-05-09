@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiskunde Avontuur - EduStreakz</title>
+    <title>Schattenjacht - EduStreakz</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.88.2/dist/phaser.min.js"></script>
 </head>
 <body>
 <header class="header">
@@ -19,8 +18,14 @@
 
 <div class="main-container">
     <div class="game-container">
-        <div id="game-canvas"></div>
-        <input type="number" id="answerInput" placeholder="Typ je antwoord">
+        <div id="hint">Hint: De schat ligt ... vanaf de vlag!</div>
+        <canvas id="gameCanvas"></canvas>
+        <div id="game-controls">
+            <input type="number" id="x-input" placeholder="X-coördinaat" min="0" max="9">
+            <input type="number" id="y-input" placeholder="Y-coördinaat" min="0" max="9">
+            <button onclick="checkCoordinates()">Controleer</button>
+        </div>
+        <div id="feedback"></div>
     </div>
 
     <div class="sidebar">
@@ -32,7 +37,7 @@
             </div>
             <div class="stat-item">
                 <span class="stat-label">Score:</span>
-                <span class="stat-value" id="score">0</span>
+                <span class="stat-value" id="score-value">0</span> <!-- Changed from #score to #score-value -->
             </div>
             <div class="stat-item">
                 <span class="stat-label">Juiste antwoorden:</span>
@@ -47,11 +52,10 @@
         <div class="instructions-card">
             <h3 class="card-title">Speluitleg</h3>
             <ul class="instructions-list">
-                <li>Beantwoord de wiskundevragen om punten te verdienen</li>
-                <li>Hoe sneller je antwoordt, hoe meer punten je krijgt</li>
-                <li>Maak een reeks van juiste antwoorden voor bonuspunten</li>
-                <li>Gebruik het invoerveld om je antwoord in te voeren</li>
-                <li>Druk op Enter om je antwoord te controleren</li>
+                <li>Zoek de schat door coördinaten in te voeren.</li>
+                <li>De vlag markeert je startpositie; volg de hint om de schat te vinden.</li>
+                <li>Gebruik de invoervelden om X- en Y-coördinaten (0-9) in te voeren.</li>
+                <li>Klik op "Controleer" om je gok te bevestigen.</li>
             </ul>
         </div>
     </div>
@@ -61,115 +65,6 @@
     © 2023 EduStreakz - Alle rechten voorbehouden | <a href="#" style="color: var(--accent-color);">Privacybeleid</a> | <a href="#" style="color: var(--accent-color);">Gebruiksvoorwaarden</a>
 </footer>
 
-<script>
-    const config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 400,
-        parent: 'game-canvas',
-        scene: {
-            preload: preload,
-            create: create,
-            update: update
-        },
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 300 },
-                debug: false
-            }
-        }
-    };
-
-    const game = new Phaser.Game(config);
-
-    let balls;
-    let ground;
-    let score = 0;
-    let lives = 3;
-    let timeElapsed = 0;
-    let correctAnswers = 0;
-    let totalAnswers = 0;
-    let streak = 0;
-    let currentQuestion;
-    let answerText;
-
-    function preload() {
-        this.load.image('ball', 'https://via.placeholder.com/50/0000FF/FFFFFF?text=O'); // Placeholder for ball
-        this.load.image('ground', 'https://via.placeholder.com/800x50/006400'); // Placeholder for ground
-    }
-
-    function create() {
-        ground = this.physics.add.staticGroup();
-        ground.create(400, 380, 'ground').setScale(1).refreshBody();
-
-        balls = this.physics.add.group({
-            key: 'ball',
-            repeat: 3,
-            setXY: { x: 100, y: 50, stepX: 150 }
-        });
-
-        this.physics.add.collider(balls, ground);
-
-        answerText = this.add.text(20, 20, 'Score: 0\nLevens: 3\nTijd: 0', {
-            fontSize: '20px',
-            fill: '#000'
-        });
-
-        generateQuestion.call(this);
-        setupInputListener();
-    }
-
-    function update(time, delta) {
-        timeElapsed += delta / 1000;
-        answerText.setText(`Score: ${score}\nLevens: ${lives}\nTijd: ${Math.floor(timeElapsed)}`);
-
-        updateStats();
-    }
-
-    function generateQuestion() {
-        const num1 = Math.floor(Math.random() * 10) + 1;
-        const num2 = Math.floor(Math.random() * 10) + 1;
-        currentQuestion = { num1, num2, answer: num1 + num2 };
-        answerText.setText(`Score: ${score}\nLevens: ${lives}\nTijd: ${Math.floor(timeElapsed)}\nVraag: ${num1} + ${num2} = ?`);
-    }
-
-    function setupInputListener() {
-        const answerInput = document.getElementById('answerInput');
-        answerInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                const userAnswer = parseInt(answerInput.value);
-                checkAnswer.call(this, userAnswer);
-                answerInput.value = '';
-            }
-        });
-    }
-
-    function checkAnswer(userAnswer) {
-        totalAnswers++;
-        if (userAnswer === currentQuestion.answer) {
-            score += 10;
-            correctAnswers++;
-            streak++;
-            if (streak % 3 === 0) score += 20; // Bonus for streak
-        } else {
-            lives--;
-            streak = 0;
-            if (lives <= 0) {
-                this.scene.pause();
-                answerText.setText('Game Over!\nScore: ' + score);
-                return;
-            }
-        }
-        generateQuestion.call(this);
-    }
-
-    function updateStats() {
-        document.getElementById('score').innerText = score;
-        document.getElementById('level').innerText = Math.floor(score / 100) + 1;
-        document.getElementById('correct').innerText = totalAnswers > 0 ? Math.round((correctAnswers / totalAnswers) * 100) + '%' : '0%';
-        document.getElementById('streak').innerText = streak;
-    }
-</script>
+<script src="game.js"></script>
 </body>
 </html>
