@@ -259,9 +259,23 @@
                 if (data.length === 0) {
                     classesList.innerHTML = '<li>Je bent nog niet ingeschreven in een klas.</li>';
                 } else {
-                    data.forEach(cls => {
+                    // Fetch student count for each class
+                    const classesWithStudentCount = await Promise.all(data.map(async (cls) => {
+                        const countResponse = await fetch(`https://edu-streakz-backend.vercel.app/api/classes/${cls.id}/student-count`, {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+                        if (!countResponse.ok) {
+                            throw new Error(`Failed to fetch student count for class ${cls.id}`);
+                        }
+                        const countData = await countResponse.ok;
+                        return { ...cls, student_count: countData ? (await countResponse.json()).count : 0 };
+                    }));
+
+                    classesWithStudentCount.forEach(cls => {
                         const li = document.createElement('li');
-                        li.innerHTML = `<i class="fas fa-book"></i> <span class="highlight">${cls.class_name}</span> (ID: ${cls.id})`;
+                        li.innerHTML = `<i class="fas fa-book"></i> <span class="highlight">${cls.class_name}</span> - Docent: ${cls.teacher_name} - Studenten: ${cls.student_count}`;
                         classesList.appendChild(li);
                     });
                 }
