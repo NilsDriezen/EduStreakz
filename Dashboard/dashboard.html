@@ -308,12 +308,12 @@
                 }
                 const data = await response.json();
 
-                document.getElementById('community-message').innerHTML = `<i class="fas fa-comments"></i> <span class="highlight">Praat mee</span> ${data.message}`;
-                document.getElementById('support-contact').innerHTML = `<i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig?</span> Neem contact op via <a href="mailto:${data.support_email}"> ${data.support_email}</a>`;
+                document.getElementById('community-message').innerHTML = `<i class="fas fa-comments"></i> ${data.message}`;
+                document.getElementById('support-contact').innerHTML = `<i class="fas fa-envelope"></i> <span> Hulp nodig? Neem contact op via </span><a href="mailto:${data.support_email}">${data.support_email}</a>`;
             } catch (error) {
                 console.error('Error fetching community data:', error);
-                document.getElementById('community-message').innerHTML = '<i class="fas fa-comments"></i> <span class="highlight">Praat mee</span> Kon communitybericht niet laden.';
-                document.getElementById('support-contact').innerHTML = '<i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig?</span> Kon supportcontact niet laden.';
+                document.getElementById('community-message').innerHTML = '<i class="fas fa-comments"></i> Kon communitybericht niet laden.';
+                document.getElementById('support-contact').innerHTML = '<i class="fas fa-envelope"></i> Kon supportcontact niet laden.';
             }
         }
 
