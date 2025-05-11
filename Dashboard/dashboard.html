@@ -89,7 +89,7 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="/index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="../games/schattenjacht.html"><i class="fas fa-calculator"></i>Schattenjacht</a></li>
                     <li><a href="games/game2.html"><i class="fas fa-flask"></i> Wetenschap Quest</a></li>
                     <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Uitloggen</a></li>
@@ -178,8 +178,8 @@
             <!-- Community & Support -->
             <section class="community-section">
                 <h2>Community & Support</h2>
-                <p id="community-message"><i class="fas fa-comments"></i> <span class="highlight">Praat mee</span> Loading...</p>
-                <p id="support-contact"><i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig?</span> Loading...</p>
+                <p id="community-message"><i class="fas fa-comments"></i> <span class="highlight"></span> Loading...</p>
+                <p id="support-contact"><i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig? </span> Loading...</p>
             </section>
         </main>
     </div>
@@ -290,7 +290,7 @@
                 leaderboardList.innerHTML = '';
                 data.forEach(entry => {
                     const li = document.createElement('li');
-                    li.innerHTML = `<i class="fas fa-medal"></i> <span class="highlight">${entry.username}</span> - ${entry.total_score || 0} XP`;
+                    li.innerHTML = `<i class="fas fa-medal"></i> <span class="highlight">${entry.username} </span> - ${entry.total_score || 0} XP`;
                     leaderboardList.appendChild(li);
                 });
             } catch (error) {
@@ -309,7 +309,7 @@
                 const data = await response.json();
 
                 document.getElementById('community-message').innerHTML = `<i class="fas fa-comments"></i> <span class="highlight">Praat mee</span> ${data.message}`;
-                document.getElementById('support-contact').innerHTML = `<i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig?</span> Neem contact op via <a href="mailto:${data.support_email}">${data.support_email}</a>`;
+                document.getElementById('support-contact').innerHTML = `<i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig?</span> Neem contact op via <a href="mailto:${data.support_email}"> ${data.support_email}</a>`;
             } catch (error) {
                 console.error('Error fetching community data:', error);
                 document.getElementById('community-message').innerHTML = '<i class="fas fa-comments"></i> <span class="highlight">Praat mee</span> Kon communitybericht niet laden.';
