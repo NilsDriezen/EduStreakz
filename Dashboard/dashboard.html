@@ -101,13 +101,6 @@
                 </section>
             </div>
 
-            <!-- Community & Support -->
-            <section class="community-section">
-                <h2>Community & Support</h2>
-                <p id="community-message"><i class="fas fa-comments"></i> <span class="highlight"></span> Loading...</p>
-                <p id="support-contact"><i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig? </span> Loading...</p>
-            </section>
-
             <!-- Classes sectie -->
             <section class="classes-section">
                 <h2>Jouw Klassen</h2>
@@ -115,6 +108,13 @@
                 <ul id="classes-list">
                     <li>Loading...</li>
                 </ul>
+            </section>
+
+            <!-- Community & Support -->
+            <section class="community-section">
+                <h2>Community & Support</h2>
+                <p id="community-message"><i class="fas fa-comments"></i> <span class="highlight"></span> Loading...</p>
+                <p id="support-contact"><i class="fas fa-envelope"></i> <span class="highlight">Hulp nodig? </span> Loading...</p>
             </section>
         </main>
     </div>
@@ -275,7 +275,7 @@
 
                     classesWithStudentCount.forEach(cls => {
                         const li = document.createElement('li');
-                        li.innerHTML = `<i class="fas fa-book"></i> <span class="highlight">${cls.class_name}</span> - Docent: ${cls.teacher_name} - Studenten: ${cls.student_count}`;
+                        li.innerHTML = `<i class="fas fa-book"></i> <span>${cls.class_name} | Leerkracht: ${cls.teacher_name} | Leerlingen: ${cls.student_count}</span>`;
                         classesList.appendChild(li);
                     });
                 }
