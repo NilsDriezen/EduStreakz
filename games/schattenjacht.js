@@ -37,7 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const rect = canvas.getBoundingClientRect();
         canvas.width = rect.width;
         canvas.height = rect.height;
-        cellSize = Math.min(canvas.width, canvas.height) / gridSize;
+        const labelSpace =30;
+        cellSize = Math.min(canvas.width / gridSize, (canvas.height - labelSpace) / gridSize);
         gridWidth = cellSize * gridSize;
         gridHeight = cellSize * gridSize;
         drawGrid(false);
