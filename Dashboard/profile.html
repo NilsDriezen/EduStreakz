@@ -194,180 +194,230 @@
 
     <!-- JavaScript -->
     <script>
-        // Modal functionality for editing "Over Mij"
-        const editModal = document.getElementById('edit-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalInput = document.getElementById('modal-input');
-        const modalOk = document.getElementById('modal-ok');
-        const modalCancel = document.getElementById('modal-cancel');
-        let currentField = null;
+    // Modal functionality for editing "Over Mij"
+    const editModal = document.getElementById('edit-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalInput = document.getElementById('modal-input');
+    const modalOk = document.getElementById('modal-ok');
+    const modalCancel = document.getElementById('modal-cancel');
+    let currentField = null;
 
-        document.querySelectorAll('.editable').forEach(item => {
-            item.addEventListener('click', () => {
-                currentField = item.getAttribute('data-field');
-                const currentValue = document.getElementById(currentField).innerText;
-                modalTitle.innerText = `Pas ${currentField.replace('-', ' ')} aan`;
-                modalInput.value = currentValue;
-                editModal.style.display = 'flex';
-            });
+    document.querySelectorAll('.editable').forEach(item => {
+        item.addEventListener('click', () => {
+            currentField = item.getAttribute('data-field');
+            const currentValue = document.getElementById(currentField).innerText;
+            modalTitle.innerText = `Pas ${currentField.replace('-', ' ')} aan`;
+            modalInput.value = currentValue === 'Niet ingesteld' ? '' : currentValue;
+            editModal.style.display = 'flex';
         });
+    });
 
-        modalOk.addEventListener('click', () => {
-            const newValue = modalInput.value.trim();
-            if (newValue !== '') {
-                document.getElementById(currentField).innerText = newValue;
-            }
-            editModal.style.display = 'none';
-        });
-
-        modalCancel.addEventListener('click', () => {
-            editModal.style.display = 'none';
-        });
-
-        // Modal functionality for profile picture
-        const profilePicModal = document.getElementById('profile-pic-modal');
-        const profilePicChoose = document.getElementById('profile-pic-choose');
-        const profilePicRemove = document.getElementById('profile-pic-remove');
-        const profilePicCancel = document.getElementById('profile-pic-cancel');
-        const profilePic = document.getElementById('profile-pic');
-        const profilePicUpload = document.getElementById('profile-pic-upload');
-        const profilePicImg = document.getElementById('profile-pic-img');
-        const profilePicIcon = document.getElementById('profile-pic-icon');
-
-        profilePic.addEventListener('click', () => {
-            profilePicModal.style.display = 'flex';
-        });
-
-        profilePicChoose.addEventListener('click', () => {
-            profilePicUpload.click();
-            profilePicModal.style.display = 'none';
-        });
-
-        profilePicRemove.addEventListener('click', () => {
-            profilePicImg.src = '';
-            profilePicImg.style.display = 'none';
-            profilePicIcon.style.display = 'block';
-            profilePicModal.style.display = 'none';
-        });
-
-        profilePicCancel.addEventListener('click', () => {
-            profilePicModal.style.display = 'none';
-        });
-
-        profilePicUpload.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    profilePicImg.src = e.target.result;
-                    profilePicImg.style.display = 'block';
-                    profilePicIcon.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Fade-out functionality
-        document.querySelectorAll('a:not(.btn)').forEach(link => {
-            link.addEventListener('click', (e) => {
-                if (link.getAttribute('onclick') === 'logout()') return;
-                e.preventDefault();
-                const href = link.getAttribute('href');
-                document.getElementById('page-body').classList.add('fade-out');
-                setTimeout(() => {
-                    window.location.href = href;
-                }, 500);
-            });
-        });
-
-        // Fetch user data
-        async function fetchUserData() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                alert('Please log in to access the profile.');
-                window.location.href = '/InlogEnRegistreer.html';
-                return;
-            }
-
+    modalOk.addEventListener('click', async () => {
+        const newValue = modalInput.value.trim();
+        if (newValue !== '') {
+            document.getElementById(currentField).innerText = newValue;
+            // Update the backend
             try {
-                const response = await fetch('https://edu-streakz-backend.vercel.app/api/user/me', {
+                const token = localStorage.getItem('token');
+                const fieldMap = {
+                    'bio': 'bio',
+                    'opleiding': 'education',
+                    'favoriete-game': 'favorite_game',
+                    'email': 'email',
+                };
+                const backendField = fieldMap[currentField];
+                const response = await fetch('https://edu-streakz-backend.vercel.app/api/user/update', {
+                    method: 'PUT',
                     headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ [backendField]: newValue })
                 });
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user data');
+                if (!response.ok) throw new Error('Failed to update user data');
+            } catch (error) {
+                console.error('Error updating user data:', error);
+                alert('Failed to update data. Please try again.');
+            }
+        }
+        editModal.style.display = 'none';
+    });
+
+    modalCancel.addEventListener('click', () => {
+        editModal.style.display = 'none';
+    });
+
+    // Modal functionality for profile picture
+    const profilePicModal = document.getElementById('profile-pic-modal');
+    const profilePicChoose = document.getElementById('profile-pic-choose');
+    const profilePicRemove = document.getElementById('profile-pic-remove');
+    const profilePicCancel = document.getElementById('profile-pic-cancel');
+    const profilePic = document.getElementById('profile-pic');
+    const profilePicUpload = document.getElementById('profile-pic-upload');
+    const profilePicImg = document.getElementById('profile-pic-img');
+    const profilePicIcon = document.getElementById('profile-pic-icon');
+
+    profilePic.addEventListener('click', () => {
+        profilePicModal.style.display = 'flex';
+    });
+
+    profilePicChoose.addEventListener('click', () => {
+        profilePicUpload.click();
+        profilePicModal.style.display = 'none';
+    });
+
+    profilePicRemove.addEventListener('click', () => {
+        profilePicImg.src = '';
+        profilePicImg.style.display = 'none';
+        profilePicIcon.style.display = 'block';
+        profilePicModal.style.display = 'none';
+    });
+
+    profilePicCancel.addEventListener('click', () => {
+        profilePicModal.style.display = 'none';
+    });
+
+    profilePicUpload.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                profilePicImg.src = e.target.result;
+                profilePicImg.style.display = 'block';
+                profilePicIcon.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Fade-out functionality
+    document.querySelectorAll('a:not(.btn)').forEach(link => {
+        link.addEventListener('click', (e) => {
+            if (link.getAttribute('onclick') === 'logout()') return;
+            e.preventDefault();
+            const href = link.getAttribute('href');
+            document.getElementById('page-body').classList.add('fade-out');
+            setTimeout(() => {
+                window.location.href = href;
+            }, 500);
+        });
+    });
+
+    // Fetch user data
+    async function fetchUserData() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please log in to access the profile.');
+            window.location.href = '/InlogEnRegistreer.html';
+            return;
+        }
+
+        try {
+            const response = await fetch('https://edu-streakz-backend.vercel.app/api/user/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
-                const data = await response.json();
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch user data');
+            }
+            const data = await response.json();
 
-                // Update profile with user data
-                document.getElementById('username').textContent = data.username;
-                document.getElementById('join-date').textContent = `Lid sinds: ${new Date(data.join_date).toLocaleDateString('nl-NL', { month: 'long', year: 'numeric' })}`;
-                document.getElementById('location').textContent = `Locatie: ${data.location}`;
-                document.getElementById('bio').textContent = data.bio;
-                document.getElementById('opleiding').textContent = data.education;
-                document.getElementById('favoriete-game').textContent = data.favorite_game;
-                document.getElementById('email').textContent = data.email;
-                document.getElementById('streak').textContent = `${data.streak} dagen`;
+            // Helper function to handle null/undefined values
+            const getValueOrDefault = (value, defaultValue = 'Niet ingesteld') => {
+                return value !== null && value !== undefined && value !== '' ? value : defaultValue;
+            };
 
-                const totalPoints = data.games.reduce((sum, game) => sum + game.score, 0);
-                const gamesPlayed = data.games.length;
-                document.getElementById('totaal-punten').textContent = `${totalPoints} XP`;
-                document.getElementById('gespeelde-games').textContent = gamesPlayed;
+            // Update profile with user data
+            document.getElementById('username').textContent = getValueOrDefault(data.username);
+            document.getElementById('join-date').textContent = `Lid sinds: ${new Date(data.join_date).toLocaleDateString('nl-NL', { month: 'long', year: 'numeric' })}`;
+            document.getElementById('location').textContent = `Locatie: ${getValueOrDefault(data.location)}`;
+            document.getElementById('bio').textContent = getValueOrDefault(data.bio);
+            document.getElementById('opleiding').textContent = getValueOrDefault(data.education);
+            document.getElementById('favoriete-game').textContent = getValueOrDefault(data.favorite_game);
+            document.getElementById('email').textContent = getValueOrDefault(data.email);
+            document.getElementById('streak').textContent = `${getValueOrDefault(data.streak, 0)} dagen`;
 
-                const highestScoreGame = data.games.reduce((max, game) => game.score > max.score ? game : max, data.games[0]);
+            // Handle games statistics
+            const games = Array.isArray(data.games) ? data.games : [];
+            const totalPoints = games.reduce((sum, game) => sum + (game.score || 0), 0);
+            const gamesPlayed = games.length;
+            document.getElementById('totaal-punten').textContent = `${totalPoints} XP`;
+            document.getElementById('gespeelde-games').textContent = gamesPlayed;
+
+            // Handle highest score
+            if (games.length > 0) {
+                const highestScoreGame = games.reduce((max, game) => (game.score || 0) > (max.score || 0) ? game : max, games[0]);
                 document.getElementById('hoogste-score').textContent = `${highestScoreGame.score} XP (${highestScoreGame.game_name})`;
+            } else {
+                document.getElementById('hoogste-score').textContent = 'Nog geen games gespeeld';
+            }
 
-                // Update badges
-                const badgesGrid = document.getElementById('badges-grid');
-                badgesGrid.innerHTML = '';
-                data.badges.forEach(badge => {
+            // Update badges
+            const badgesGrid = document.getElementById('badges-grid');
+            badgesGrid.innerHTML = '';
+            const badges = Array.isArray(data.badges) ? data.badges : [];
+            if (badges.length > 0) {
+                badges.forEach(badge => {
                     const div = document.createElement('div');
                     div.className = 'badge';
                     div.innerHTML = `<i class="fas fa-award"></i><p>${badge}</p>`;
                     badgesGrid.appendChild(div);
                 });
+            } else {
+                badgesGrid.innerHTML = '<p>Geen badges vrijgespeeld</p>';
+            }
 
-                // Update activities
-                const activityList = document.getElementById('activity-list');
-                activityList.innerHTML = '';
-                data.activities.forEach(activity => {
+            // Update activities
+            const activityList = document.getElementById('activity-list');
+            activityList.innerHTML = '';
+            const activities = Array.isArray(data.activities) ? data.activities : [];
+            if (activities.length > 0) {
+                activities.forEach(activity => {
                     const li = document.createElement('li');
                     const timeDiff = Math.round((new Date() - new Date(activity.timestamp)) / (1000 * 60 * 60 * 24));
                     const timeText = timeDiff === 0 ? 'Vandaag' : timeDiff === 1 ? 'Gisteren' : `${timeDiff} dagen geleden`;
                     li.innerHTML = `<i class="fas fa-check-circle"></i> ${activity.text} (${timeText})`;
                     activityList.appendChild(li);
                 });
+            } else {
+                activityList.innerHTML = '<li>Geen recente activiteiten</li>';
+            }
 
-                // Update friends
-                document.getElementById('friend-count').textContent = data.friend_count;
-                const friendsGrid = document.getElementById('friends-grid');
-                friendsGrid.innerHTML = '';
-                data.friends.forEach(friend => {
+            // Update friends
+            document.getElementById('friend-count').textContent = getValueOrDefault(data.friend_count, 0);
+            const friendsGrid = document.getElementById('friends-grid');
+            friendsGrid.innerHTML = '';
+            const friends = Array.isArray(data.friends) ? data.friends : [];
+            if (friends.length > 0) {
+                friends.forEach(friend => {
                     const div = document.createElement('div');
                     div.className = 'friend';
                     div.innerHTML = `<i class="fas fa-user"></i><p>${friend}</p>`;
                     friendsGrid.appendChild(div);
                 });
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                alert('Failed to load profile data. Please try again later.');
-                localStorage.removeItem('token');
-                window.location.href = '/InlogEnRegistreer.html';
+            } else {
+                friendsGrid.innerHTML = '<p>Geen vrienden toegevoegd</p>';
             }
-        }
-
-        // Logout function
-        function logout() {
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            alert('Failed to load profile data. Please try again later.');
             localStorage.removeItem('token');
-            document.getElementById('page-body').classList.add('fade-out');
-            setTimeout(() => {
-                window.location.href = '/InlogEnRegistreer.html';
-            }, 500);
+            window.location.href = '/InlogEnRegistreer.html';
         }
+    }
 
-        // Fetch user data when the page loads
-        document.addEventListener('DOMContentLoaded', fetchUserData);
-    </script>
+    // Logout function
+    function logout() {
+        localStorage.removeItem('token');
+        document.getElementById('page-body').classList.add('fade-out');
+        setTimeout(() => {
+            window.location.href = '/InlogEnRegistreer.html';
+        }, 500);
+    }
+
+    // Fetch user data when the page loads
+    document.addEventListener('DOMContentLoaded', fetchUserData);
+</script>
 </body>
 </html>
