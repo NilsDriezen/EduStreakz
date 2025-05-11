@@ -58,7 +58,7 @@
             <a href="#" class="active"><i class="fas fa-user"></i> Profiel</a>
             <a href="../games/schattenjacht.html"><i class="fas fa-calculator"></i> Schattenjacht</a>
             <a href="../games/game2.html"><i class="fas fa-flask"></i> Wetenschap Quest</a>
-            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Uitloggen</a>
+            <a href="" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Uitloggen</a>
         </div>
     </nav>
 
@@ -298,7 +298,7 @@
             document.getElementById('page-body').classList.add('fade-out');
             setTimeout(() => {
                 window.location.href = href;
-            }, 500);
+            }, 250);
         });
     });
 
@@ -411,8 +411,8 @@
         localStorage.removeItem('token');
         document.getElementById('page-body').classList.add('fade-out');
         setTimeout(() => {
-            window.location.href = '/InlogEnRegistreer.html';
-        }, 500);
+            window.location.href = 'Login/InlogEnRegistreer.html';
+        }, 250);
     }
 
     // Fetch user data when the page loads
