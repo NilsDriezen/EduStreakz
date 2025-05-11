@@ -12,6 +12,7 @@ let hint = '';
 let score = 0;
 let guesses = [];
 let isResetting = false;
+const gameName = "Schattenjacht";
 
 // Load the sand background image
 const sandImage = new Image();
@@ -32,6 +33,27 @@ flagImage.onerror = () => console.error('Failed to load flag.png');
 const pileImage = new Image();
 pileImage.src = 'assets/pile.png';
 pileImage.onerror = () => console.error('Failed to load pile.png');
+
+async function fetchInitialScore(gameName) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`https://edu-streakz-backend.vercel.app/api/score/initial?game_name=${encodeURIComponent(gameName)}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error('Failed to fetch initial score');
+        const data = await response.json();
+        score = data.score; // Update the global score variable
+        document.getElementById('score-value').textContent = score; // Update the UI
+    } catch (error) {
+        console.error('Error fetching initial score:', error);
+        score = 0; // Fallback to 0 if fetch fails
+        document.getElementById('score-value').textContent = score;
+    }
+}
 
 // Define functions globally
 function resizeCanvas() {
@@ -267,5 +289,7 @@ sandImage.onerror = () => console.error('Failed to load sand.png');
 treasureChestImage.onerror = () => console.error('Failed to load treasurechest.png');
 flagImage.onerror = () => console.error('Failed to load flag.png');
 pileImage.onerror = () => console.error('Failed to load pile.png');
-drawGrid(false);
-generateLevel();
+fetchInitialScore(gameName).then(() => {
+    drawGrid(false);
+    generateLevel();
+});
