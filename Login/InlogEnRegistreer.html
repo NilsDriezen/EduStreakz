@@ -134,7 +134,7 @@
                     throw new Error(data.error || 'Login failed');
                 }
                 localStorage.setItem('token', data.token);
-                window.location.href = data.role === 'teacher' ? '/teacher_dashboard.html' : '/Dashboard/dashboard.html';
+                window.location.href = data.role === 'teacher' ? '/Dashboard/teacher_dashboard.html' : '/Dashboard/dashboard.html';
             } catch (error) {
                 console.error('Error during login:', error);
                 alert(error.message || 'Login failed. Please check your credentials.');
@@ -201,7 +201,7 @@
                 }
 
                 localStorage.setItem('token', loginData.token);
-                window.location.href = loginData.role === 'teacher' ? '/teacher_dashboard.html' : '/Dashboard/dashboard.html';
+                window.location.href = loginData.role === 'teacher' ? '/Dashboard/teacher_dashboard.html' : '/Dashboard/dashboard.html';
             } catch (error) {
                 console.error('Error during signup:', error);
                 document.getElementById('date-error').textContent = error.message || 'Signup failed. Please try again.';
