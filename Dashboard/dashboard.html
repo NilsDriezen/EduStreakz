@@ -219,7 +219,7 @@
             if (!token) {
                 alert('Please log in to access the dashboard.');
 
-                window.location.href = '/Inlog%20&%20registreer%20pagina/InlogEnRegistreer.html';
+                window.location.href = '/Login/InlogEnRegistreer.html';
                 return;
             }
 
@@ -272,7 +272,7 @@
                 console.error('Error fetching user data:', error);
                 alert('Failed to load dashboard data. Please try again later.');
                 localStorage.removeItem('token');
-                window.location.href = '/Inlog%20&%20registreer%20pagina/InlogEnRegistreer.html';
+                window.location.href = '/Login/InlogEnRegistreer.html';
                 return null;
             }
         }
@@ -322,7 +322,7 @@
             localStorage.removeItem('token');
             document.getElementById('page-body').classList.add('fade-out');
             setTimeout(() => {
-                window.location.href = '/Inlog%20&%20registreer%20pagina/InlogEnRegistreer.html';
+                window.location.href = '/Login/InlogEnRegistreer.html';
             }, 500);
         }
 
