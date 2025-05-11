@@ -309,7 +309,7 @@
                 const data = await response.json();
 
                 document.getElementById('community-message').innerHTML = `<i class="fas fa-comments"></i> ${data.message}`;
-                document.getElementById('support-contact').innerHTML = `<i class="fas fa-envelope"></i> <span> Hulp nodig? Neem contact op via </span><a href="mailto:${data.support_email}">${data.support_email}</a>`;
+                document.getElementById('support-contact').innerHTML = `<i class="fas fa-envelope"></i> <span> Hulp nodig? Neem contact op via:&nbsp;</span><a href="mailto:${data.support_email}">${data.support_email}</a>`;
             } catch (error) {
                 console.error('Error fetching community data:', error);
                 document.getElementById('community-message').innerHTML = '<i class="fas fa-comments"></i> Kon communitybericht niet laden.';
