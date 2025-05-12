@@ -141,18 +141,6 @@
             }
 
             try {
-                // Update streak first
-                const streakResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/update-streak', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                if (!streakResponse.ok) {
-                    throw new Error('Failed to update streak');
-                }
-                const streakData = await streakResponse.json();
-
                 // Fetch user data
                 const response = await fetch('https://edu-streakz-backend.vercel.app/api/user/me', {
                     headers: {
@@ -166,7 +154,7 @@
 
                 // Redirect teachers to teacher dashboard
                 if (data.role === 'teacher') {
-                    window.location.href = '/teacher_dashboard.html';
+                    window.location.href = '/Dashboard/teacher_dashboard.html';
                     return null;
                 }
                 // Update dashboard with user data
