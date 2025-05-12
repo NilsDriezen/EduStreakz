@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rijdend Rekenen: Snelheid, Afstand, Tijd</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <script src="rijdendrekenen.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #question-box {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            z-index: 10; /* Ensure it appears above the canvas */
+            display: none; /* Controlled by JavaScript */
+        }
+        .answer-button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .answer-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">Edu<span>Streakz</span></div>
+    <nav class="nav-links">
+        <a href="/index.html">Home</a>
+        <a href="/Dashboard/dashboard.html">Dashboard</a>
+        <a href="/Dashboard/profile.html">Profiel</a>
+    </nav>
+</header>
+
+<div class="main-container">
+    <div class="game-container">
+        <div id="hint">Hint: Beantwoord de vraag om verder te gaan!</div>
+        <div id="game-container">
+            <!-- Phaser game canvas will be injected here by rijdendrekenen.js -->
+        </div>
+        <div id="question-box">
+            <div id="question-text"></div>
+            <button class="answer-button" onclick="checkAnswer(0)"></button>
+            <button class="answer-button" onclick="checkAnswer(1)"></button>
+            <button class="answer-button" onclick="checkAnswer(2)"></button>
+            <div id="feedback"></div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="stats-card">
+            <h3 class="card-title">Jouw Statistieken</h3>
+            <div class="stat-item">
+                <span class="stat-label">Level:</span>
+                <span class="stat-value" id="level">1</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Score:</span>
+                <span class="stat-value" id="score-value">0</span>
+            </div>
+        </div>
+
+        <div class="instructions-card">
+            <h3 class="card-title">Speluitleg</h3>
+            <ul class="instructions-list">
+                <li>Rijd met de auto door de checkpoints.</li>
+                <li>Beantwoord rekenvragen over snelheid, afstand en tijd om verder te gaan.</li>
+                <li>Correcte antwoorden geven +10 punten, foutieve antwoorden -5 punten.</li>
+                <li>Bereik de finish om te winnen!</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    © 2025 EduStreakz - Alle rechten voorbehouden | <a href="#" style="color: var(--accent-color);">Privacybeleid</a> | <a href="#" style="color: var(--accent-color);">Gebruiksvoorwaarden</a>
+</footer>
+
+<script src="rijdendrekenen.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93e8f84b6cf6672b',t:'MTc0NzA0Mjk4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93e8ff1fff564507',t:'MTc0NzA0MzI2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>
