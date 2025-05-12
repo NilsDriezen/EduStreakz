@@ -26,10 +26,13 @@ const config = {
 let car, road, checkpoints, controlsBox, questionText, answerButtons, feedbackText;
 let currentCheckpoint = 0;
 let score = 0;
+let level = 1; // Initialize level to 1
 let gameOver = false;
 let moveBackward = 0;
 let advanceCheckpoint = false;
 let isWaiting = false;
+const gameName = "Rijdend Rekenen"; // Define game name
+let gameCompleted = false; // Flag to prevent multiple completeGame calls
 
 const game = new Phaser.Game(config);
 
@@ -42,6 +45,74 @@ function preload() {
     this.load.on('loaderror', (file) => {
         console.error('Error loading file:', file.key);
     });
+}
+
+async function fetchInitialScore(gameName) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`https://edu-streakz-backend.vercel.app/api/score/initial?game_name=${encodeURIComponent(gameName)}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error('Failed to fetch initial score');
+        const data = await response.json();
+        score = data.score; // Update the global score variable
+        document.getElementById('score-value').textContent = score; // Update the UI
+    } catch (error) {
+        console.error('Error fetching initial score:', error);
+        score = 0; // Fallback to 0 if fetch fails
+        document.getElementById('score-value').textContent = score;
+    }
+}
+
+async function completeGame(gameName, score, level) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Please log in to save your game progress.');
+        window.location.href = '/Login/InlogEnRegistreer.html';
+        return;
+    }
+
+    try {
+        // Save the score to the database using /api/games
+        const scoreResponse = await fetch('https://edu-streakz-backend.vercel.app/api/games', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                game_name: gameName,
+                score: score,
+                level: level
+            })
+        });
+
+        if (!scoreResponse.ok) {
+            const errorData = await scoreResponse.json();
+            throw new Error(`Failed to save score: ${errorData.error || 'Unknown error'}`);
+        }
+
+        // Update the streak
+        const streakResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/update-streak', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!streakResponse.ok) {
+            throw new Error('Failed to update streak');
+        }
+
+        const streakData = await streakResponse.json();
+        console.log(`Streak updated to: ${streakData.streak}`);
+    } catch (error) {
+        console.error('Error completing game:', error);
+    }
 }
 
 function create() {
@@ -116,11 +187,20 @@ function create() {
     } catch (error) {
         console.error('Failed to add hint text:', error);
     }
+
+    // Fetch initial score
+    fetchInitialScore(gameName);
 }
 
 function update() {
     if (gameOver) {
         console.log('Game over, stopping update loop');
+        if (!gameCompleted) {
+            gameCompleted = true; // Prevent multiple calls
+            completeGame(gameName, score, level).then(() => {
+                console.log('Game completion logged');
+            });
+        }
         return;
     }
 
