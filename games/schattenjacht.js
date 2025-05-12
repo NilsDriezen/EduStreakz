@@ -318,10 +318,8 @@ async function completeGame(gameName, score, level) {
 
         const streakData = await streakResponse.json();
         console.log(`Streak updated to: ${streakData.streak}`);
-        alert(`Game completed! Your streak is now ${streakData.streak} days.`);
     } catch (error) {
         console.error('Error completing game:', error);
-        alert(`Failed to save game progress: ${error.message}. Please try again.`);
     }
 }
 
