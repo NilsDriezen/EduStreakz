@@ -288,7 +288,7 @@ async function completeGame(gameName, score, level) {
         }
 
         // Log completion with current date (optional, as /api/games already logs activity)
-        const logResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/log-activity', {
+        /*const logResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/log-activity', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -302,9 +302,9 @@ async function completeGame(gameName, score, level) {
 
         if (!logResponse.ok) {
             throw new Error('Failed to log game completion');
-        }
+        }*/
 
-        // Update the streak.
+        // Update the streak
         const streakResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/update-streak', {
             method: 'POST',
             headers: {
