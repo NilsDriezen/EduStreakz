@@ -10,6 +10,7 @@ let playerPos = { x: 0, y: 0 };
 let treasurePos = { x: 0, y: 0 };
 let hint = '';
 let score = 0;
+let level;
 let guesscount = 0;
 let guesses = [];
 let isResetting = false;
@@ -194,6 +195,7 @@ function generateLevel() {
         treasurePos = { x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) };
     } while (playerPos.x === treasurePos.x && playerPos.y === treasurePos.y);
     guesses = [];
+    guessescount = 0;
     const dx = treasurePos.x - playerPos.x;
     const dy = treasurePos.y - playerPos.y;
     let hintText = `De schat ligt `;
@@ -223,33 +225,28 @@ function checkCoordinates() {
     }
 
     if (xInput === treasurePos.x && yInput === treasurePos.y) {
+        // Update score and UI
         score += 10;
-	score = score - guesscount;
+        score = score - guesscount;
         document.getElementById('score-value').textContent = score;
         feedback.textContent = 'Gefeliciteerd! Je hebt de schat gevonden!';
         guesses = [];
         drawGrid(true);
 
-        // Update score on the backend
-        updateScoreOnServer();
+        // Increment level
+        level++;
+        document.getElementById('level').textContent = level;
 
-        setTimeout(() => {
-            try {
-                generateLevel();
-            } catch (error) {
-                console.error('Error during level reset:', error);
-            }
-        }, 3000);
-    } else {
-        if (!guesses.some(guess => guess.x === xInput && guess.y === yInput)) {
-            guesses.push({ x: xInput, y: yInput });
-        }
-	if (guesscount <= 10) {
-  	guesscount++;
-	}
-
-        feedback.textContent = `Helaas, dat is niet correct. Probeer opnieuw!`;
-        drawGrid(false);
+        // Log completion, save score, and update streak
+        completeGame(gameName, score, level).then(() => {
+            setTimeout(() => {
+                try {
+                    generateLevel();
+                } catch (error) {
+                    console.error('Error during level reset:', error);
+                }
+            }, 3000);
+        });
     }
 }
 
@@ -262,6 +259,24 @@ async function completeGame(gameName, score, level) {
     }
 
     try {
+        // Save the score to the database
+        const scoreResponse = await fetch('https://edu-streakz-backend.vercel.app/api/scores', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                game_name: gameName,
+                score: score,
+                level: level
+            })
+        });
+
+        if (!scoreResponse.ok) {
+            throw new Error('Failed to save score');
+        }
+
         // Log completion with current date
         const logResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/log-activity', {
             method: 'POST',
