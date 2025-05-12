@@ -3,6 +3,12 @@ const config = {
     width: 800,
     height: 600,
     parent: 'game-container',
+    scale: {
+        mode: Phaser.Scale.FIT, // Scale to fit the parent container while maintaining aspect ratio
+        autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game horizontally and vertically
+        width: 800,
+        height: 600
+    },
     physics: {
         default: 'arcade',
         arcade: {

@@ -8,20 +8,34 @@
     <script src="rijdendrekenen.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="../assets/favicon/logo-edustreakz.ico" type="image/x-icon">
-    <style>
+<style>
+        #game-container {
+            width: 100%;
+            max-width: 800px; /* Maximum width of the game canvas */
+            height: 60vw; /* Maintain aspect ratio (600/800 = 0.75) */
+            max-height: 600px; /* Maximum height of the game canvas */
+            margin: 0 auto; /* Center the game container */
+            position: relative; /* Allow absolute positioning of children */
+            overflow: hidden; /* Prevent overflow issues */
+        }
+
         #question-box {
             position: absolute;
-            top: 50px;
+            bottom: 20px; /* Position at the bottom with a 20px offset */
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%); /* Center horizontally */
             background-color: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 10px;
             text-align: center;
             font-family: Arial, sans-serif;
-            z-index: 10; /* Ensure it appears above the canvas */
-            display: none; /* Controlled by JavaScript */
+            z-index: 10;
+            display: none;
+            width: 90%; /* Responsive width */
+            max-width: 500px; /* Prevent it from becoming too wide */
+            box-sizing: border-box;
         }
+
         .answer-button {
             margin: 5px;
             padding: 10px 20px;
@@ -32,8 +46,61 @@
             border: none;
             border-radius: 5px;
         }
+
         .answer-button:hover {
             background-color: #45a049;
+        }
+
+        /* Ensure the main container is responsive */
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 1200px; /* Limit the overall width */
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .game-container {
+            flex: 1;
+            max-width: 800px; /* Match the game canvas max width */
+        }
+
+        .sidebar {
+            width: 300px; /* Fixed width for sidebar */
+            margin-left: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .sidebar {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 20px;
+            }
+
+            #game-container {
+                height: 80vw; /* Adjust height for smaller screens */
+                max-height: 500px;
+            }
+
+            #question-box {
+                bottom: 10px; /* Smaller offset on mobile */
+                font-size: 14px; /* Smaller font on mobile */
+                padding: 15px; /* Adjust padding */
+            }
+
+            .answer-button {
+                font-size: 14px; /* Smaller buttons on mobile */
+                padding: 8px 15px;
+            }
         }
     </style>
 </head>
