@@ -304,7 +304,7 @@ async function completeGame(gameName, score, level) {
             throw new Error('Failed to log game completion');
         }
 
-        // Update the streak
+        // Update the streak.
         const streakResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/update-streak', {
             method: 'POST',
             headers: {
