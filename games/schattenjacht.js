@@ -10,6 +10,7 @@ let playerPos = { x: 0, y: 0 };
 let treasurePos = { x: 0, y: 0 };
 let hint = '';
 let score = 0;
+let guesscount = 0;
 let guesses = [];
 let isResetting = false;
 const gameName = "Schattenjacht";
@@ -223,6 +224,7 @@ function checkCoordinates() {
 
     if (xInput === treasurePos.x && yInput === treasurePos.y) {
         score += 10;
+	score = score - guesscount;
         document.getElementById('score-value').textContent = score;
         feedback.textContent = 'Gefeliciteerd! Je hebt de schat gevonden!';
         guesses = [];
@@ -242,6 +244,10 @@ function checkCoordinates() {
         if (!guesses.some(guess => guess.x === xInput && guess.y === yInput)) {
             guesses.push({ x: xInput, y: yInput });
         }
+	if (guesscount <= 10) {
+  	guesscount++;
+	}
+
         feedback.textContent = `Helaas, dat is niet correct. Probeer opnieuw!`;
         drawGrid(false);
     }
