@@ -253,6 +253,53 @@ function checkCoordinates() {
     }
 }
 
+async function completeGame(gameName, score, level) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Please log in to save your game progress.');
+        window.location.href = '/Login/InlogEnRegistreer.html';
+        return;
+    }
+
+    try {
+        // Log completion with current date
+        const logResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/log-activity', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                activity_text: `Completed ${gameName} - Level ${level}`,
+                timestamp: new Date().toISOString() // Ensure current date is logged
+            })
+        });
+
+        if (!logResponse.ok) {
+            throw new Error('Failed to log game completion');
+        }
+
+        // Update the streak
+        const streakResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/update-streak', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!streakResponse.ok) {
+            throw new Error('Failed to update streak');
+        }
+
+        const streakData = await streakResponse.json();
+        console.log(`Streak updated to: ${streakData.streak}`);
+        alert(`Game completed! Your streak is now ${streakData.streak} days.`);
+    } catch (error) {
+        console.error('Error completing game:', error);
+        alert('Failed to save game progress. Please try again.');
+    }
+}
+
 async function updateScoreOnServer() {
     try {
         const response = await fetch('https://edu-streakz-backend.vercel.app/api/scores', {

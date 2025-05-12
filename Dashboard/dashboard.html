@@ -129,7 +129,7 @@
             });
         });
 
-        // Fetch user data
+        // Fetch user data and update streak
         async function fetchUserData() {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -139,6 +139,19 @@
             }
 
             try {
+                // Update streak first
+                const streakResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/update-streak', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!streakResponse.ok) {
+                    throw new Error('Failed to update streak');
+                }
+                const streakData = await streakResponse.json();
+
+                // Fetch user data
                 const response = await fetch('https://edu-streakz-backend.vercel.app/api/user/me', {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -182,6 +195,28 @@
                 localStorage.removeItem('token');
                 window.location.href = '/Login/InlogEnRegistreer.html';
                 return null;
+            }
+        }
+
+        // Function to call after game completion to update streak
+        async function updateStreakAfterGame() {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch('https://edu-streakz-backend.vercel.app/api/user/update-streak', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to update streak');
+                }
+                const data = await response.json();
+                // Update streak display on the dashboard
+                document.getElementById('streak-header').textContent = `${data.streak} dagen streak`;
+                document.getElementById('streak-days').textContent = data.streak;
+            } catch (error) {
+                console.error('Error updating streak after game:', error);
             }
         }
 
