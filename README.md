@@ -1,5 +1,5 @@
 # EduStreakz
-# Edustreakz
+
 
 ## Gemaakt door:
 
