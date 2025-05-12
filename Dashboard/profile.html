@@ -1,3 +1,4 @@
+<!-- profile.html -->
 <script type="text/javascript">
         var gk_isXlsx = false;
         var gk_xlsxFileLookup = {};
@@ -131,24 +132,10 @@
                         <span id="hoogste-score">150 XP (Wetenschap Quest)</span>
                     </p>
                 </section>
-
-                <section class="badges-section">
-                    <h2>Vrijgespeelde Badges</h2>
-                    <div class="badges-grid" id="badges-grid">
-                        <!-- Dynamically populated -->
-                    </div>
-                </section>
             </div>
 
-            <!-- Rechterkolom: Recente activiteiten en vrienden -->
+            <!-- Rechterkolom: Vrienden -->
             <div class="profile-right">
-                <section class="activity-section">
-                    <h2>Recente Activiteiten</h2>
-                    <ul id="activity-list">
-                        <!-- Dynamically populated -->
-                    </ul>
-                </section>
-
                 <section class="friends-section">
                     <h2>Vrienden & Community</h2>
                     <p><i class="fas fa-users"></i> <strong>Aantal Vrienden:</strong> <span id="friend-count">12</span></p>
@@ -349,37 +336,6 @@
                 document.getElementById('hoogste-score').textContent = `${highestScoreGame.score} XP (${highestScoreGame.game_name})`;
             } else {
                 document.getElementById('hoogste-score').textContent = 'Nog geen games gespeeld';
-            }
-
-            // Update badges
-            const badgesGrid = document.getElementById('badges-grid');
-            badgesGrid.innerHTML = '';
-            const badges = Array.isArray(data.badges) ? data.badges : [];
-            if (badges.length > 0) {
-                badges.forEach(badge => {
-                    const div = document.createElement('div');
-                    div.className = 'badge';
-                    div.innerHTML = `<i class="fas fa-award"></i><p>${badge}</p>`;
-                    badgesGrid.appendChild(div);
-                });
-            } else {
-                badgesGrid.innerHTML = '<p>Geen badges vrijgespeeld</p>';
-            }
-
-            // Update activities
-            const activityList = document.getElementById('activity-list');
-            activityList.innerHTML = '';
-            const activities = Array.isArray(data.activities) ? data.activities : [];
-            if (activities.length > 0) {
-                activities.forEach(activity => {
-                    const li = document.createElement('li');
-                    const timeDiff = Math.round((new Date() - new Date(activity.timestamp)) / (1000 * 60 * 60 * 24));
-                    const timeText = timeDiff === 0 ? 'Vandaag' : timeDiff === 1 ? 'Gisteren' : `${timeDiff} dagen geleden`;
-                    li.innerHTML = `<i class="fas fa-check-circle"></i> ${activity.text} (${timeText})`;
-                    activityList.appendChild(li);
-                });
-            } else {
-                activityList.innerHTML = '<li>Geen recente activiteiten</li>';
             }
 
             // Update friends

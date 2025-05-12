@@ -1,3 +1,4 @@
+/* profile.css */
 /* Algemene styling */
 * {
     margin: 0;
@@ -162,14 +163,14 @@ body {
     gap: 20px;
 }
 
-.info-section, .stats-section, .badges-section {
+.info-section, .stats-section {
     background-color: #FFFFFF;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.info-section h2, .stats-section h2, .badges-section h2 {
+.info-section h2, .stats-section h2 {
     font-size: 20px;
     color: #1B263B;
     margin-bottom: 15px;
@@ -203,27 +204,6 @@ body {
     margin-left: 5px;
 }
 
-.badges-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
-}
-
-.badge {
-    text-align: center;
-}
-
-.badge i {
-    font-size: 30px;
-    color: #778DA9;
-    margin-bottom: 5px;
-}
-
-.badge p {
-    font-size: 12px;
-    color: #1B263B;
-}
-
 /* Rechterkolom */
 .profile-right {
     display: flex;
@@ -231,34 +211,17 @@ body {
     gap: 20px;
 }
 
-.activity-section, .friends-section {
+.friends-section {
     background-color: #FFFFFF;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.activity-section h2, .friends-section h2 {
+.friends-section h2 {
     font-size: 20px;
     color: #1B263B;
     margin-bottom: 15px;
-}
-
-.activity-section ul {
-    list-style: none;
-}
-
-.activity-section ul li {
-    font-size: 14px;
-    color: #415A77;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-}
-
-.activity-section ul li i {
-    margin-right: 10px;
-    color: #778DA9;
 }
 
 .friends-section p {

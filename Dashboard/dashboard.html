@@ -1,3 +1,4 @@
+<!-- dashboard.html -->
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -84,7 +85,7 @@
                 </div>
             </section>
 
-            <!-- Leaderboard en Beloningen -->
+            <!-- Leaderboard -->
             <div class="bottom-sections">
                 <section class="leaderboard-section">
                     <h2>Leaderboard</h2>
@@ -92,12 +93,6 @@
                     <ul id="leaderboard-list">
                         <li>Loading...</li>
                     </ul>
-                </section>
-
-                <section class="rewards-section">
-                    <h2>Beloningen en Doelen</h2>
-                    <p id="next-goal"><i class="fas fa-bullseye"></i> <span class="highlight">Jouw volgende doel</span>: Loading...</p>
-                    <p id="unlocked-badges"><i class="fas fa-unlock"></i> <span class="highlight">Vrijgespeelde badges</span>: Loading...</p>
                 </section>
             </div>
 
@@ -184,11 +179,6 @@
                         document.getElementById('general-knowledge-stats').textContent = `Score: ${game.score} | Level: ${game.level}`;
                     }
                 });
-
-                // Update rewards section
-                const nextGoal = data.goals.find(goal => !goal.completed) || { text: 'Geen open doelen' };
-                document.getElementById('next-goal').innerHTML = `<i class="fas fa-bullseye"></i> <span class="highlight">Jouw volgende doel</span>: ${nextGoal.text}`;
-                document.getElementById('unlocked-badges').innerHTML = `<i class="fas fa-unlock"></i> <span class="highlight">Vrijgespeelde badges</span>: ${data.badges.length} badges - inclusief '${data.badges.join("', '")}'`;
 
                 return data;
             } catch (error) {
