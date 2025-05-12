@@ -10,7 +10,7 @@ let playerPos = { x: 0, y: 0 };
 let treasurePos = { x: 0, y: 0 };
 let hint = '';
 let score = 0;
-let level;
+let level = 1; // Initialize level to 1
 let guesscount = 0;
 let guesses = [];
 let isResetting = false;
@@ -195,7 +195,7 @@ function generateLevel() {
         treasurePos = { x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) };
     } while (playerPos.x === treasurePos.x && playerPos.y === treasurePos.y);
     guesses = [];
-    guessescount = 0;
+    guesscount = 0; // Corrected typo
     const dx = treasurePos.x - playerPos.x;
     const dy = treasurePos.y - playerPos.y;
     let hintText = `De schat ligt `;
@@ -247,6 +247,15 @@ function checkCoordinates() {
                 }
             }, 3000);
         });
+    } else {
+        if (!guesses.some(guess => guess.x === xInput && guess.y === yInput)) {
+            guesses.push({ x: xInput, y: yInput });
+        }
+        if (guesscount <= 10) {
+            guesscount++;
+        }
+        feedback.textContent = `Helaas, dat is niet correct. Probeer opnieuw!`;
+        drawGrid(false);
     }
 }
 
@@ -312,34 +321,6 @@ async function completeGame(gameName, score, level) {
     } catch (error) {
         console.error('Error completing game:', error);
         alert('Failed to save game progress. Please try again.');
-    }
-}
-
-async function updateScoreOnServer() {
-    try {
-        const response = await fetch('https://edu-streakz-backend.vercel.app/api/scores', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify({
-                game_name: 'Schattenjacht',
-                score: score,
-                level: 1
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Kon score niet updaten');
-        }
-
-        const data = await response.json();
-        console.log('Score succesvol geüpdatet:', data.message);
-        document.getElementById('feedback').textContent = 'Gefeliciteerd! Je hebt de schat gevonden en je score is opgeslagen!';
-    } catch (error) {
-        console.error('Fout bij het updaten van de score:', error);
-        document.getElementById('feedback').textContent = 'Kon score niet opslaan. Probeer later opnieuw.';
     }
 }
 
