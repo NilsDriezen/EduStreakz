@@ -8,7 +8,7 @@
     <script src="rijdendrekenen.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="../assets/favicon/logo-edustreakz.ico" type="image/x-icon">
-<style>
+    <style>
         #game-container {
             width: 100%;
             max-width: 800px; /* Maximum width of the game canvas */
@@ -19,7 +19,7 @@
             overflow: hidden; /* Prevent overflow issues */
         }
 
-        #question-box {
+        #controls-box {
             position: absolute;
             bottom: 20px; /* Position at the bottom with a 20px offset */
             left: 50%;
@@ -30,14 +30,13 @@
             text-align: center;
             font-family: Arial, sans-serif;
             z-index: 10;
-            display: none;
             width: 90%; /* Responsive width */
             max-width: 500px; /* Prevent it from becoming too wide */
             box-sizing: border-box;
+            display: none; /* Controlled by JavaScript */
         }
 
         .answer-button {
-            margin: 5px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
@@ -45,61 +44,40 @@
             color: white;
             border: none;
             border-radius: 5px;
+            margin: 5px;
         }
 
         .answer-button:hover {
             background-color: #45a049;
         }
 
-        /* Ensure the main container is responsive */
-        .main-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            width: 100%;
-            max-width: 1200px; /* Limit the overall width */
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
+        #question-text {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #333;
         }
 
-        .game-container {
-            flex: 1;
-            max-width: 800px; /* Match the game canvas max width */
-        }
-
-        .sidebar {
-            width: 300px; /* Fixed width for sidebar */
-            margin-left: 20px;
+        #feedback {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
         }
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
-            .main-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .sidebar {
-                width: 100%;
-                margin-left: 0;
-                margin-top: 20px;
-            }
-
-            #game-container {
-                height: 80vw; /* Adjust height for smaller screens */
-                max-height: 500px;
-            }
-
-            #question-box {
+            #controls-box {
                 bottom: 10px; /* Smaller offset on mobile */
                 font-size: 14px; /* Smaller font on mobile */
                 padding: 15px; /* Adjust padding */
             }
 
             .answer-button {
-                font-size: 14px; /* Smaller buttons on mobile */
+                font-size: 14px;
                 padding: 8px 15px;
+            }
+
+            #question-text, #feedback {
+                font-size: 14px;
             }
         }
     </style>
@@ -116,15 +94,16 @@
 
 <div class="main-container">
     <div class="game-container">
-        <div id="hint">Hint: Beantwoord de vraag om verder te gaan!</div>
         <div id="game-container">
             <!-- Phaser game canvas will be injected here by rijdendrekenen.js -->
         </div>
-        <div id="question-box">
+        <div id="controls-box">
             <div id="question-text"></div>
-            <button class="answer-button" onclick="checkAnswer(0)"></button>
-            <button class="answer-button" onclick="checkAnswer(1)"></button>
-            <button class="answer-button" onclick="checkAnswer(2)"></button>
+            <div id="game-controls">
+                <button class="answer-button" onclick="checkAnswer(0)"></button>
+                <button class="answer-button" onclick="checkAnswer(1)"></button>
+                <button class="answer-button" onclick="checkAnswer(2)"></button>
+            </div>
             <div id="feedback"></div>
         </div>
     </div>
@@ -161,5 +140,6 @@
 <script src="rijdendrekenen.js"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93e8f84b6cf6672b',t:'MTc0NzA0Mjk4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93e8ff1fff564507',t:'MTc0NzA0MzI2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93ebb4430c0a7221',t:'MTc0NzA3MTY1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
