@@ -268,8 +268,8 @@ async function completeGame(gameName, score, level) {
     }
 
     try {
-        // Save the score to the database
-        const scoreResponse = await fetch('https://edu-streakz-backend.vercel.app/api/scores', {
+        // Save the score to the database using /api/games
+        const scoreResponse = await fetch('https://edu-streakz-backend.vercel.app/api/games', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -283,10 +283,11 @@ async function completeGame(gameName, score, level) {
         });
 
         if (!scoreResponse.ok) {
-            throw new Error('Failed to save score');
+            const errorData = await scoreResponse.json();
+            throw new Error(`Failed to save score: ${errorData.error || 'Unknown error'}`);
         }
 
-        // Log completion with current date
+        // Log completion with current date (optional, as /api/games already logs activity)
         const logResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/log-activity', {
             method: 'POST',
             headers: {
@@ -295,7 +296,7 @@ async function completeGame(gameName, score, level) {
             },
             body: JSON.stringify({
                 activity_text: `Completed ${gameName} - Level ${level}`,
-                timestamp: new Date().toISOString() // Ensure current date is logged
+                timestamp: new Date().toISOString()
             })
         });
 
@@ -320,7 +321,7 @@ async function completeGame(gameName, score, level) {
         alert(`Game completed! Your streak is now ${streakData.streak} days.`);
     } catch (error) {
         console.error('Error completing game:', error);
-        alert('Failed to save game progress. Please try again.');
+        alert(`Failed to save game progress: ${error.message}. Please try again.`);
     }
 }
 
