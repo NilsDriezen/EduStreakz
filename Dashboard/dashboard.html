@@ -20,8 +20,9 @@
             <nav>
                 <ul>
                     <li><a href="/index.html"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="../games/schattenjacht.html"><i class="fas fa-calculator"></i>Schattenjacht</a></li>
-                    <li><a href="../games/rijdendrekenen.html"><i class="fas fa-car"></i> Rijdend Rekenen</a></li>
+                    <li><a href="../games/schattenjacht.html"><i class="fa-solid fa-gem"></i>Schattenjacht</a></li>
+                    <li><a href="games/rijdendrekenen.html"><i class="fas fa-car"></i> Rijdend Rekenen</a></li>
+
                     <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Uitloggen</a></li>
                 </ul>
             </nav>
@@ -168,11 +169,11 @@
                     window.location.href = '/teacher_dashboard.html';
                     return null;
                 }
-
                 // Update dashboard with user data
                 document.getElementById('welcome-message').textContent = `Welkom, ${data.username}!`;
                 document.getElementById('streak-header').textContent = `${data.streak} dagen streak`;
                 document.getElementById('streak-days').textContent = data.streak;
+
 
                 const totalPoints = data.games.reduce((sum, game) => sum + game.score, 0);
                 const gamesPlayed = data.games.length;
