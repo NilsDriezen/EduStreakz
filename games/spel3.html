@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Golden Gate Kracht Uitdaging</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { 
+      margin: 0; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      font-family: 'Arial', sans-serif; 
+      background: linear-gradient(to bottom, #87CEEB, #ADD8E6, #B0E0E6); 
+      min-height: 100vh; 
+    }
+    canvas { 
+      border: 2px solid #333; 
+      border-radius: 10px; 
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4); 
+      margin-bottom: 20px; 
+    }
+    #feedback { 
+      transition: opacity 0.5s ease; 
+      opacity: 0; 
+    }
+    #feedback.show { 
+      opacity: 1; 
+    }
+    .progress-bar { 
+      width: 300px; 
+      height: 20px; 
+      background: #333; 
+      border-radius: 10px; 
+      overflow: hidden; 
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2); 
+    }
+    .progress { 
+      height: 100%; 
+      background: linear-gradient(to right, #00B7EB, #1E90FF); 
+      transition: width 0.5s ease; 
+    }
+    #inputForm { 
+      background: rgba(255, 255, 255, 0.85); 
+      backdrop-filter: blur(8px); 
+      border-radius: 12px; 
+      padding: 20px; 
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-5xl w-full p-6">
+    <h1 class="text-4xl font-bold text-white text-center mb-6 drop-shadow-lg">Golden Gate Kracht Uitdaging</h1>
+    <div class="flex justify-center mb-6">
+      <div class="progress-bar">
+        <div id="progress" class="progress" style="width: 0%;"></div>
+      </div>
+    </div>
+    <div class="flex justify-center space-x-4 mb-6">
+      <button onclick="startChallenge()" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform hover:scale-105">Start Uitdaging</button>
+      <button onclick="resetGame()" class="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 shadow-md transition-transform hover:scale-105">Reset</button>
+    </div>
+    <div id="inputForm" class="p-6 rounded-lg shadow-xl hidden">
+      <p id="scenarioText" class="text-xl font-semibold text-gray-800 mb-4"></p>
+      <div class="mb-4">
+        <label id="inputLabel" class="block text-gray-800 font-medium"></label>
+        <input type="number" id="calculationInput" class="p-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Voer je antwoord in">
+      </div>
+      <button onclick="submitCalculation()" class="bg-yellow-500 text-white px-4 py-2 rounded-full hover:bg-yellow-600 w-full mt-4 shadow-md transition-transform hover:scale-105">Controleer Antwoord</button>
+    </div>
+    <div id="feedback" class="text-center text-xl font-bold mt-6"></div>
+  </div>
+  <script>
+    let gameState = "start";
+    let vehicleX = -50;
+    let vehicleY = 190; // Wielen op wegdek
+    let score = 0;
+    let lives = 3;
+    let particles = [];
+    let clouds = [];
+    let currentScenario = null;
+    let calculationCorrect = false;
+    let completedScenarios = 0;
+    let bridgeBroken = false;
+    let breakProgress = 0;
+    let wrongAnswers = 0;
+    let hardMode = false; // Nieuwe variabele voor modus zonder formules
+    const g = 9.81; // m/s²
+
+    const scenarios = [
+      { name: "Bus op de Brug", avgMass: 5000, maxCount: 2 },
+      { name: "Auto op de Brug", avgMass: 1500, maxCount: 4 },
+      { name: "Motor op de Brug", avgMass: 200, maxCount: 10 }
+    ];
+
+    function setup() {
+      createCanvas(800, 400);
+      textAlign(CENTER);
+      for (let i = 0; i < 3; i++) {
+        clouds.push({ x: random(0, 800), y: random(50, 150), size: random(50, 100), speed: random(0.2, 0.5) });
+      }
+    }
+
+    function draw() {
+      background(135, 206, 235);
+      for (let y = 0; y < height; y += 20) {
+        let c = lerpColor(color('#87CEEB'), color('#ADD8E6'), y / height);
+        stroke(c);
+        line(0, y, width, y);
+      }
+      noStroke();
+
+      // Teken zee met meer golven, verder uit elkaar
+      fill(0, 0, 139);
+      rect(0, 250, 800, 150);
+      // Laag 1
+      fill(135, 206, 235, 80);
+      for (let x = 0; x < width; x += 40) {
+        triangle(
+          x, 295 + sin(frameCount * 0.02 + x * 0.05) * 10,
+          x + 20, 295 + sin(frameCount * 0.02 + (x + 20) * 0.05) * 10,
+          x + 40, 295 + sin(frameCount * 0.02 + (x + 40) * 0.05) * 10
+        );
+      }
+      // Laag 2
+      fill(70, 130, 180, 60);
+      for (let x = 0; x < width; x += 30) {
+        triangle(
+          x, 305 + sin(frameCount * 0.03 + x * 0.07) * 8,
+          x + 15, 305 + sin(frameCount * 0.03 + (x + 15) * 0.07) * 8,
+          x + 30, 305 + sin(frameCount * 0.03 + (x + 30) * 0.07) * 8
+        );
+      }
+      // Laag 3
+      fill(100, 149, 237, 50);
+      for (let x = 0; x < width; x += 35) {
+        triangle(
+          x, 315 + sin(frameCount * 0.025 + x * 0.06) * 7,
+          x + 17.5, 315 + sin(frameCount * 0.025 + (x + 17.5) * 0.06) * 7,
+          x + 35, 315 + sin(frameCount * 0.025 + (x + 35) * 0.06) * 7
+        );
+      }
+      // Laag 4
+      fill(30, 144, 255, 70);
+      for (let x = 0; x < width; x += 38) {
+        triangle(
+          x, 325 + sin(frameCount * 0.022 + x * 0.055) * 9,
+          x + 19, 325 + sin(frameCount * 0.022 + (x + 19) * 0.055) * 9,
+          x + 38, 325 + sin(frameCount * 0.022 + (x + 38) * 0.055) * 9
+        );
+      }
+      // Laag 5
+      fill(65, 105, 225, 60);
+      for (let x = 0; x < width; x += 42) {
+        triangle(
+          x, 335 + sin(frameCount * 0.018 + x * 0.045) * 6,
+          x + 21, 335 + sin(frameCount * 0.018 + (x + 21) * 0.045) * 6,
+          x + 42, 335 + sin(frameCount * 0.018 + (x + 42) * 0.045) * 6
+        );
+      }
+
+      fill(34, 139, 34);
+      rect(0, 170, 100, 230);
+      rect(700, 170, 100, 230);
+
+      fill(50);
+      rect(0, 170, 800, 20);
+      stroke(255);
+      strokeWeight(2);
+      for (let x = 20; x < 780; x += 40) {
+        line(x, 180, x + 20, 180);
+      }
+      noStroke();
+
+      fill(255, 255, 255, 150);
+      for (let cloud of clouds) {
+        ellipse(cloud.x, cloud.y, cloud.size, cloud.size * 0.6);
+        cloud.x += cloud.speed;
+        if (cloud.x > 850) cloud.x = -50;
+      }
+
+      stroke(80);
+      strokeWeight(10);
+      noFill();
+      beginShape();
+      for (let x = 100; x <= 700; x += 5) {
+        let y = 65 + 0.001 * (x - 400) * (x - 400);
+        vertex(x, y);
+      }
+      endShape();
+
+      strokeWeight(3);
+      for (let x = 120; x <= 680; x += 20) {
+        let yTop = 65 + 0.001 * (x - 400) * (x - 400);
+        line(x, yTop, x, 170);
+      }
+
+      if (!bridgeBroken || vehicleX < 400) {
+        fill(100);
+        rect(100, 170, 600, 20);
+        stroke(255);
+        strokeWeight(1);
+        for (let x = 120; x <= 680; x += 20) {
+          line(x, 175, x + 10, 175);
+        }
+        noStroke();
+      } else {
+        fill(100);
+        rect(100, 170, 240, 20);
+        rect(460, 170, 240, 20);
+        fill(135, 206, 235);
+        rect(340, 170, 120, 20);
+        stroke(255);
+        strokeWeight(1);
+        for (let x = 120; x < 340; x += 20) {
+          line(x, 175, x + 10, 175);
+        }
+        for (let x = 460; x <= 680; x += 20) {
+          line(x, 175, x + 10, 175);
+        }
+        noStroke();
+      }
+
+      if (gameState === "testing") {
+        if (currentScenario.name === "Bus op de Brug") {
+          fill(255, 165, 0);
+          rect(vehicleX, vehicleY - 25, 80, 25, 5);
+          fill(200);
+          rect(vehicleX + 10, vehicleY - 22, 20, 10, 3);
+          rect(vehicleX + 35, vehicleY - 22, 20, 10, 3);
+          fill(0);
+          ellipse(vehicleX + 15, vehicleY, 10, 10);
+          ellipse(vehicleX + 65, vehicleY, 10, 10);
+          if (random() < 0.2 && !bridgeBroken) {
+            particles.push({ x: vehicleX + 80, y: vehicleY - 10, vx: random(-1, 0), vy: random(-1, 0), color: "#666", life: 20 });
+          }
+        } else if (currentScenario.name === "Auto op de Brug") {
+          fill(0, 0, 255);
+          rect(vehicleX, vehicleY - 15, 60, 15, 5);
+          fill(200);
+          rect(vehicleX + 15, vehicleY - 13, 15, 8, 2);
+          rect(vehicleX + 35, vehicleY - 13, 15, 8, 2);
+          fill(0);
+          ellipse(vehicleX + 10, vehicleY, 8, 8);
+          ellipse(vehicleX + 50, vehicleY, 8, 8);
+          if (random() < 0.2 && !bridgeBroken) {
+            particles.push({ x: vehicleX + 60, y: vehicleY - 5, vx: random(-1, 0), vy: random(-1, 0), color: "#666", life: 20 });
+          }
+        } else if (currentScenario.name === "Motor op de Brug") {
+          fill(128, 128, 128);
+          rect(vehicleX, vehicleY - 10, 40, 10, 3);
+          stroke(128, 128, 128);
+          strokeWeight(2);
+          line(vehicleX + 30, vehicleY - 10, vehicleX + 35, vehicleY - 15);
+          noStroke();
+          fill(0);
+          ellipse(vehicleX + 5, vehicleY, 8, 8);
+          ellipse(vehicleX + 35, vehicleY, 8, 8);
+          if (random() < 0.2 && !bridgeBroken) {
+            particles.push({ x: vehicleX + 40, y: vehicleY - 5, vx: random(-1, 0), vy: random(-1, 0), color: "#666", life: 20 });
+          }
+        }
+
+        if (bridgeBroken && vehicleX >= 400) {
+          vehicleY += 5;
+          if (vehicleY > 300) {
+            gameState = "failed";
+            document.getElementById("feedback").innerText = "Oh nee! De brug brak en het voertuig viel in het water!";
+            document.getElementById("feedback").classList.add("text-red-600", "show");
+            createCollapseParticles();
+          }
+        } else {
+          vehicleX += 3;
+          if (vehicleX > 850) {
+            gameState = "success";
+            score += 100;
+            completedScenarios++;
+            if (completedScenarios >= 3) {
+              completedScenarios = 0; // Reset voortgang
+              hardMode = true; // Activeer modus zonder formules
+            }
+            updateProgress();
+            document.getElementById("feedback").innerText = `Hoera! De brug hield stand! Score: ${score}`;
+            document.getElementById("feedback").classList.add("text-green-600", "show");
+            createConfetti();
+          }
+        }
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        let p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.1;
+        p.life--;
+        fill(p.color);
+        ellipse(p.x, p.y, 5, 5);
+        if (p.y > 400 || p.life <= 0) particles.splice(i, 1);
+      }
+
+      if (gameState === "start") {
+        fill(255);
+        textSize(24);
+        textStyle(BOLD);
+        text("Golden Gate Kracht Uitdaging!", width / 2, 50);
+        textSize(16);
+        text("Start een nieuwe uitdaging!", width / 2, 80);
+      }
+
+      fill(255);
+      rect(10, 10, 200, 40, 10);
+      fill(0);
+      textSize(16);
+      text(`Score: ${score} | Levens: ${lives}`, 110, 30);
+
+      if (bridgeBroken && vehicleX >= 400 && breakProgress < 1) {
+        breakProgress += 0.05;
+      }
+    }
+
+    function startChallenge() {
+      gameState = "calculating";
+      currentScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+      currentScenario.count = Math.floor(random(1, currentScenario.maxCount + 1));
+      currentScenario.mass = currentScenario.avgMass * currentScenario.count;
+      currentScenario.force = currentScenario.mass * g;
+      currentScenario.calcType = random() > 0.5 ? "calculateF" : "calculateM";
+      let description = currentScenario.name + ": ";
+      let unit = currentScenario.name === "Bus op de Brug" ? "bussen" : 
+                 currentScenario.name === "Auto op de Brug" ? "auto's" : 
+                 "motoren";
+      if (currentScenario.calcType === "calculateF") {
+        description += `Het gemiddelde gewicht van een ${unit.slice(0, -1)} is ${currentScenario.avgMass} kg. Er zijn ${currentScenario.count} ${unit} op de brug. Bereken de totale kracht${hardMode ? "." : " (F = massa × 9.81)."}`;
+        document.getElementById("inputLabel").innerText = "Totale kracht op de brug (N):";
+      } else {
+        description += `De totale kracht op de brug is ${currentScenario.force.toFixed(0)} N. Er zijn ${currentScenario.count} ${unit} op de brug. Bereken de totale massa${hardMode ? "." : " (massa = kracht ÷ 9.81)."}`;
+        document.getElementById("inputLabel").innerText = "Totale massa (kg):";
+      }
+      document.getElementById("scenarioText").innerText = description;
+      document.getElementById("calculationInput").value = "";
+      document.getElementById("inputForm").classList.remove("hidden");
+      document.getElementById("feedback").innerText = "";
+      document.getElementById("feedback").classList.remove("text-green-600", "text-red-600", "show");
+      calculationCorrect = false;
+      bridgeBroken = false;
+      breakProgress = 0;
+      vehicleX = -50;
+      vehicleY = 190;
+      wrongAnswers = 0;
+    }
+
+    function submitCalculation() {
+      let input = parseFloat(document.getElementById("calculationInput").value);
+      let feedback = "";
+      if (currentScenario.calcType === "calculateF") {
+        if (Math.abs(input - currentScenario.force) / currentScenario.force < 0.05) {
+          feedback = "Super! De kracht is correct!";
+          score += 50;
+          calculationCorrect = true;
+        } else {
+          wrongAnswers++;
+          lives--;
+          feedback = wrongAnswers >= 2 ? "Oeps, niet goed. Geen hint meer!" : `Oeps, niet goed. Hint: ${hardMode ? `Totale massa = ${currentScenario.mass} kg` : `F = massa × 9.81, totale massa = ${currentScenario.mass} kg`}`;
+          calculationCorrect = false;
+          bridgeBroken = true;
+        }
+      } else {
+        if (Math.abs(input - currentScenario.mass) / currentScenario.mass < 0.05) {
+          feedback = "Super! De massa is correct!";
+          score += 50;
+          calculationCorrect = true;
+        } else {
+          wrongAnswers++;
+          lives--;
+          feedback = wrongAnswers >= 2 ? "Oeps, niet goed. Geen hint meer!" : `Oeps, niet goed. Hint: ${hardMode ? `Totale kracht = ${currentScenario.force.toFixed(0)} N` : `massa = kracht ÷ 9.81, totale kracht = ${currentScenario.force.toFixed(0)} N`}`;
+          calculationCorrect = false;
+          bridgeBroken = true;
+        }
+      }
+
+      document.getElementById("feedback").innerText = feedback;
+      document.getElementById("feedback").classList.add(calculationCorrect ? "text-green-600" : "text-red-600", "show");
+      gameState = "testing";
+      document.getElementById("inputForm").classList.add("hidden");
+
+      if (lives <= 0) {
+        document.getElementById("feedback").innerText = "Game Over! Je hebt geen levens meer.";
+        document.getElementById("feedback").classList.add("text-red-600", "show");
+        setTimeout(resetGame, 2000);
+      }
+    }
+
+    function resetGame() {
+      gameState = "start";
+      vehicleX = -50;
+      vehicleY = 190;
+      calculationCorrect = false;
+      bridgeBroken = false;
+      breakProgress = 0;
+      particles = [];
+      document.getElementById("inputForm").classList.add("hidden");
+      document.getElementById("feedback").innerText = "";
+      document.getElementById("feedback").classList.remove("text-green-600", "text-red-600", "show");
+      score = 0;
+      lives = 3;
+      completedScenarios = 0;
+      wrongAnswers = 0;
+      hardMode = false; // Reset naar normale modus
+      updateProgress();
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 100; i++) {
+        particles.push({
+          x: random(0, 800),
+          y: random(0, 100),
+          vx: random(-3, 3),
+          vy: random(1, 5),
+          color: `hsl(${random(0, 360)}, 70%, 70%)`,
+          life: 50
+        });
+      }
+    }
+
+    function createCollapseParticles() {
+      for (let i = 0; i < 50; i++) {
+        particles.push({
+          x: random(340, 460),
+          y: 170,
+          vx: random(-5, 5),
+          vy: random(-2, 5),
+          color: "#A9A9A9",
+          life: 30
+        });
+      }
+      for (let i = 0; i < 20; i++) {
+        particles.push({
+          x: random(340, 460),
+          y: 300,
+          vx: random(-2, 2),
+          vy: random(-5, -2),
+          color: "#00B7EB",
+          life: 20
+        });
+      }
+    }
+
+    function updateProgress() {
+      let progress = (completedScenarios / 3) * 100;
+      document.getElementById("progress").style.width = `${progress}%`;
+    }
+  </script>
+</body>
+</html>
