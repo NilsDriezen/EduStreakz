@@ -287,24 +287,7 @@ async function completeGame(gameName, score, level) {
             throw new Error(`Failed to save score: ${errorData.error || 'Unknown error'}`);
         }
 
-        // Log completion with current date (optional, as /api/games already logs activity)
-        const logResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/log-activity', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                activity_text: `Completed ${gameName} - Level ${level}`,
-                timestamp: new Date().toISOString()
-            })
-        });
-
-        if (!logResponse.ok) {
-            throw new Error('Failed to log game completion');
-        }
-
-        // Update the streak.
+        // Update the streak
         const streakResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/update-streak', {
             method: 'POST',
             headers: {
