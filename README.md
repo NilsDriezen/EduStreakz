@@ -18,7 +18,7 @@
 ## Leerdoelen:
 
 * De leerlingen leiden de uitwerking van krachten af uit authentieke contexten.
-* De leerlingen bepalen punten in het vlak door middel van co√∂rdinaten.
+* De leerlingen bepalen punten in het vlak door middel van coordinaten.
 * De leerlingen onderzoeken het verband tussen snelheid, afstand en tijd.
 
 ## Games:
