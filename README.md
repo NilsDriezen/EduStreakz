@@ -28,6 +28,9 @@
    ![Alt-tekst](assets/images/Screenshot_schattenjacht.jpg)
 
 2. Game 2 Rijdend rekenen  
-   ![Alt-tekst](assets/images/Screenshot_rijdend_rekenen.png) 
+   ![Alt-tekst](assets/images/Screenshot_rijdend_rekenen.png)
+
+3. Game 3 Golden Gate
+   ![Alt-tekst](assets/images/Screenshot_Golden_Gate.jpg)
 
 
