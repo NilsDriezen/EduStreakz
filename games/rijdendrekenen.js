@@ -13,7 +13,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: false // Explicitly disable physics debug to prevent rendering physics bodies
+            debug: false
         }
     },
     scene: {
@@ -30,7 +30,7 @@ let level = 1;
 let gameOver = false;
 let moveBackward = 0;
 let advanceCheckpoint = false;
-let isWaiting = false;
+let isWaiting = true; // Start with isWaiting true to prevent movement until first question is answered
 const gameName = "Rijdend Rekenen";
 let gameCompleted = false;
 
@@ -135,13 +135,9 @@ function create() {
     checkpoints = this.physics.add.group();
     try {
         for (let i = 0; i < 5; i++) {
-            // Create a physics body without a texture, ensuring it's not rendered
-            let checkpoint = this.physics.add.existing(
-                this.add.rectangle(400, 400 - i * 100, 50, 10, 0x000000, 0) // Transparent rectangle
-            );
+            let checkpoint = checkpoints.create(400, 400 - i * 100, null);
+            checkpoint.setSize(50, 10).setVisible(false).setActive(true);
             checkpoint.body.setImmovable(true);
-            checkpoint.setVisible(false); // Explicitly hide to prevent rendering
-            checkpoints.add(checkpoint);
         }
     } catch (error) {
         console.error('Failed to create checkpoints:', error);
@@ -163,6 +159,7 @@ function create() {
         this.physics.add.overlap(car, checkpoints, (car, checkpoint) => {
             console.log('Checkpoint hit:', currentCheckpoint);
             checkpoint.disableBody(true, true);
+            isWaiting = true; // Stop car movement until question is answered
             showQuestion();
         }, null, this);
     } catch (error) {
@@ -185,6 +182,9 @@ function create() {
     }
 
     fetchInitialScore(gameName);
+
+    // Show initial question to start the game
+    showQuestion();
 }
 
 function resetGame(scene) {
@@ -196,7 +196,7 @@ function resetGame(scene) {
         gameCompleted = false;
         moveBackward = 0;
         advanceCheckpoint = false;
-        isWaiting = false;
+        isWaiting = true; // Prevent movement until first question is answered
 
         if (car) {
             car.setPosition(400, 500);
@@ -206,7 +206,8 @@ function resetGame(scene) {
         if (checkpoints) {
             checkpoints.getChildren().forEach((checkpoint, index) => {
                 checkpoint.enableBody(true, 400, 400 - index * 100, true, true);
-                checkpoint.setVisible(false); // Ensure checkpoints remain invisible
+                checkpoint.setVisible(false).setActive(true);
+                checkpoint.body.setImmovable(true);
             });
         }
 
@@ -220,6 +221,9 @@ function resetGame(scene) {
         document.getElementById('score-value').textContent = score;
 
         fetchInitialScore(gameName);
+
+        // Show initial question after reset
+        showQuestion();
 
         console.log('Game reset successfully');
     } catch (error) {
@@ -369,6 +373,7 @@ function checkAnswer(index) {
                 if (controlsBox) {
                     controlsBox.style.display = 'none';
                     currentCheckpoint++;
+                    isWaiting = false; // Allow car to move to next checkpoint
                     console.log('Correct answer, advancing to checkpoint:', currentCheckpoint);
                 }
             }, 1000);
