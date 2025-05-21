@@ -369,3 +369,126 @@ body {
     bottom: 0;
     width: 100%;
 }
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    /* Top navigation */
+    .top-nav {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .nav-logo h2 {
+        font-size: 20px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        align-items: center;
+    }
+
+    .nav-links a {
+        font-size: 14px;
+        padding: 8px;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Profile content */
+    .profile-content {
+        padding: 15px;
+    }
+
+    /* Profile header */
+    .cover-photo {
+        height: 150px;
+    }
+
+    .profile-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 15px;
+        top: -30px;
+    }
+
+    .profile-pic {
+        width: 100px;
+        height: 100px;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .profile-details h1 {
+        font-size: 24px;
+    }
+
+    .profile-details p {
+        font-size: 12px;
+    }
+
+    /* Profile grid */
+    .profile-grid {
+        grid-template-columns: 1fr; /* Stack columns vertically */
+    }
+
+    /* Left and right columns */
+    .profile-left, .profile-right {
+        gap: 15px;
+    }
+
+    .info-section, .stats-section, .friends-section {
+        padding: 15px;
+    }
+
+    .info-section h2, .stats-section h2, .friends-section h2 {
+        font-size: 18px;
+    }
+
+    .info-section p, .stats-section p, .friends-section p {
+        font-size: 12px;
+    }
+
+    /* Friends grid */
+    .friends-grid {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+
+    .friend p {
+        font-size: 10px;
+    }
+
+    .btn {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    /* Modal */
+    .modal-content {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .modal-content h3 {
+        font-size: 16px;
+    }
+
+    .modal-content input {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .modal-btn {
+        padding: 8px 15px;
+        font-size: 12px;
+        max-width: 120px;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 15px;
+        font-size: 12px;
+    }
+}
