@@ -374,3 +374,127 @@ body {
     margin-right: 10px;
     color: #778DA9;
 }
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    /* Sidebar becomes a collapsible menu */
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: 0;
+        left: -100%; /* Hidden by default */
+        transition: left 0.3s ease-in-out;
+        z-index: 1000;
+    }
+
+    .sidebar.active {
+        left: 0; /* Show sidebar when active */
+    }
+
+    /* Toggle button for sidebar */
+    .sidebar-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1100;
+        background-color: #1B263B;
+        color: #FFFFFF;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Main content adjustments */
+    .main-content {
+        margin-left: 0; /* No sidebar space on mobile */
+        padding: 20px;
+    }
+
+    /* Dashboard header */
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .header-title h1 {
+        font-size: 24px;
+    }
+
+    .header-title p {
+        font-size: 14px;
+    }
+
+    .user-profile {
+        margin-top: 10px;
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    /* Progress cards */
+    .progress-cards {
+        grid-template-columns: 1fr; /* Stack cards vertically */
+    }
+
+    .progress-card {
+        padding: 15px;
+    }
+
+    .progress-card h3 {
+        font-size: 16px;
+    }
+
+    .progress-card p {
+        font-size: 12px;
+    }
+
+    /* Games grid */
+    .games-grid {
+        grid-template-columns: 1fr; /* Stack games vertically */
+    }
+
+    .game-card {
+        padding: 15px;
+    }
+
+    .game-card h3 {
+        font-size: 18px;
+    }
+
+    .game-card p {
+        font-size: 12px;
+    }
+
+    .btn {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    /* Leaderboard and other sections */
+    .leaderboard-section, .classes-section, .community-section {
+        padding: 15px;
+    }
+
+    .leaderboard-section h2, .classes-section h2, .community-section h2 {
+        font-size: 18px;
+    }
+
+    .leaderboard-section p, .classes-section p, .community-section p {
+        font-size: 12px;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 15px;
+        font-size: 12px;
+    }
+}
+
+/* Ensure sidebar toggle is hidden on desktop */
+@media (min-width: 769px) {
+    .sidebar-toggle {
+        display: none;
+    }
+}
