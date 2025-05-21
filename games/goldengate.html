@@ -363,7 +363,7 @@
       currentScenario.mass = currentScenario.avgMass * currentScenario.count;
       currentScenario.force = currentScenario.mass * g;
       currentScenario.calcType = random() > 0.5 ? "calculateF" : "calculateM";
-      let description = currentScenario.name + ": ";
+      let description = ": ";
       let unit = currentScenario.name === "Bus op de Brug" ? "bussen" : 
                  currentScenario.name === "Auto op de Brug" ? "auto's" : 
                  "motoren";
