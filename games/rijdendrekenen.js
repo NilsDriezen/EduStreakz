@@ -4,8 +4,8 @@ const config = {
     height: 600,
     parent: 'game-container',
     scale: {
-        mode: Phaser.Scale.FIT, // Scale to fit the parent container while maintaining aspect ratio
-        autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game horizontally and vertically
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
         width: 800,
         height: 600
     },
@@ -26,19 +26,19 @@ const config = {
 let car, road, checkpoints, controlsBox, questionText, answerButtons, feedbackText;
 let currentCheckpoint = 0;
 let score = 0;
-let level = 1; // Initialize level to 1
+let level = 1;
 let gameOver = false;
 let moveBackward = 0;
 let advanceCheckpoint = false;
 let isWaiting = false;
-const gameName = "Rijdend Rekenen"; // Define game name
-let gameCompleted = false; // Flag to prevent multiple completeGame calls
+const gameName = "Rijdend Rekenen";
+let gameCompleted = false;
 
 const game = new Phaser.Game(config);
 
 function preload() {
     this.load.image('car', 'https://labs.phaser.io/assets/sprites/car90.png');
-    this.load.image('road', 'road.png'); // Nieuwe afbeelding lokaal laden
+    this.load.image('road', 'road.png');
     this.load.on('filecomplete-image-road', () => {
         console.log('Road image loaded successfully');
     });
@@ -59,11 +59,11 @@ async function fetchInitialScore(gameName) {
         });
         if (!response.ok) throw new Error('Failed to fetch initial score');
         const data = await response.json();
-        score = data.score; // Update the global score variable
-        document.getElementById('score-value').textContent = score; // Update the UI
+        score = data.score;
+        document.getElementById('score-value').textContent = score;
     } catch (error) {
         console.error('Error fetching initial score:', error);
-        score = 0; // Fallback to 0 if fetch fails
+        score = 0;
         document.getElementById('score-value').textContent = score;
     }
 }
@@ -77,7 +77,6 @@ async function completeGame(gameName, score, level) {
     }
 
     try {
-        // Save the score to the database using /api/games
         const scoreResponse = await fetch('https://edu-streakz-backend.vercel.app/api/games', {
             method: 'POST',
             headers: {
@@ -96,7 +95,6 @@ async function completeGame(gameName, score, level) {
             throw new Error(`Failed to save score: ${errorData.error || 'Unknown error'}`);
         }
 
-        // Update the streak
         const streakResponse = await fetch('https://edu-streakz-backend.vercel.app/api/user/update-streak', {
             method: 'POST',
             headers: {
@@ -116,28 +114,24 @@ async function completeGame(gameName, score, level) {
 }
 
 function create() {
-    // Fallback achtergrondkleur instellen
-    this.cameras.main.setBackgroundColor('#000000'); // Zwart als fallback
+    this.cameras.main.setBackgroundColor('#000000');
 
-    // Weg als achtergrond
     try {
         road = this.add.tileSprite(400, 300, 800, 600, 'road');
-        road.setTileScale(1.5625, 1.171875); // Schaal de textuur: 800/512 = 1.5625 (breedte), 600/512 = 1.171875 (hoogte)
+        road.setTileScale(1.5625, 1.171875);
     } catch (error) {
         console.error('Failed to create road tileSprite:', error);
     }
 
-    // Auto
     try {
         car = this.physics.add.sprite(400, 500, 'car');
         car.setCollideWorldBounds(true);
         car.setScale(1.2);
-        car.setAngle(-90); // Roteer de auto om naar boven te kijken
+        car.setAngle(-90);
     } catch (error) {
         console.error('Failed to create car sprite:', error);
     }
 
-    // Checkpoints
     checkpoints = this.physics.add.group();
     try {
         for (let i = 0; i < 5; i++) {
@@ -148,7 +142,6 @@ function create() {
         console.error('Failed to create checkpoints:', error);
     }
 
-    // HTML-elementen
     try {
         controlsBox = document.getElementById('controls-box');
         questionText = document.getElementById('question-text');
@@ -161,7 +154,6 @@ function create() {
         console.error('Error accessing HTML elements:', error);
     }
 
-    // Botsing met checkpoints
     try {
         this.physics.add.overlap(car, checkpoints, (car, checkpoint) => {
             console.log('Checkpoint hit:', currentCheckpoint);
@@ -174,7 +166,6 @@ function create() {
 
     document.getElementById('score-value').textContent = score;
 
-    // Hint text
     try {
         this.add.text(this.cameras.main.width / 2, 20, 'Hint: Beantwoord de vraag om verder te gaan!', {
             fontFamily: 'Arial',
@@ -188,29 +179,87 @@ function create() {
         console.error('Failed to add hint text:', error);
     }
 
-    // Fetch initial score
     fetchInitialScore(gameName);
+}
+
+function resetGame(scene) {
+    try {
+        // Reset game variables
+        score = 0;
+        level = 1;
+        currentCheckpoint = 0;
+        gameOver = false;
+        gameCompleted = false;
+        moveBackward = 0;
+        advanceCheckpoint = false;
+        isWaiting = false;
+
+        // Reset car position
+        if (car) {
+            car.setPosition(400, 500);
+            car.setVelocity(0);
+        }
+
+        // Reactivate checkpoints
+        if (checkpoints) {
+            checkpoints.getChildren().forEach((checkpoint, index) => {
+                checkpoint.enableBody(true, 400, 400 - index * 100, true, true);
+            });
+        }
+
+        // Reset UI
+        if (controlsBox && questionText && answerButtons && feedbackText) {
+            controlsBox.style.display = 'none';
+            questionText.innerHTML = '';
+            answerButtons.forEach(btn => btn.style.display = 'none');
+            feedbackText.innerHTML = '';
+        }
+
+        // Update score display
+        document.getElementById('score-value').textContent = score;
+
+        // Fetch initial score again
+        fetchInitialScore(gameName);
+
+        console.log('Game reset successfully');
+    } catch (error) {
+        console.error('Error resetting game:', error);
+    }
 }
 
 function update() {
     if (gameOver) {
         console.log('Game over, stopping update loop');
         if (!gameCompleted) {
-            gameCompleted = true; // Prevent multiple calls
+            gameCompleted = true;
             completeGame(gameName, score, level).then(() => {
                 console.log('Game completion logged');
+                // Show game over message and add reset option
+                if (controlsBox && questionText && answerButtons && feedbackText) {
+                    controlsBox.style.display = 'block';
+                    questionText.innerHTML = `Gefeliciteerd! Je hebt de finish bereikt met ${score} punten!<br><button id="reset-button">Opnieuw Spelen</button>`;
+                    answerButtons.forEach(btn => btn.style.display = 'none');
+                    feedbackText.innerHTML = '';
+                    // Add event listener for reset button
+                    const resetButton = document.getElementById('reset-button');
+                    if (resetButton) {
+                        resetButton.addEventListener('click', () => {
+                            resetGame(this);
+                        }, { once: true });
+                    }
+                } else {
+                    console.error('Cannot display game over message: HTML elements missing');
+                }
             });
         }
         return;
     }
 
     try {
-        // Scroll de weg-achtergrond
         if (road) {
             road.tilePositionY -= 2;
         }
 
-        // Als de auto achteruit rijdt, verwerk dat eerst
         if (moveBackward > 0) {
             if (car) {
                 car.y += 2;
@@ -226,12 +275,11 @@ function update() {
                         advanceCheckpoint = false;
                         console.log('Advanced to checkpoint:', currentCheckpoint);
                     }
-                }, 500); // Wacht 500ms
+                }, 500);
             }
             return;
         }
 
-        // Beweeg alleen naar voren als we niet wachten
         if (!isWaiting && currentCheckpoint < checkpoints.getChildren().length) {
             let target = checkpoints.getChildren()[currentCheckpoint];
             if (target && target.active) {
@@ -244,14 +292,6 @@ function update() {
         } else if (currentCheckpoint >= checkpoints.getChildren().length) {
             console.log('Reached final checkpoint, ending game');
             gameOver = true;
-            if (controlsBox && questionText && answerButtons && feedbackText) {
-                controlsBox.style.display = 'block';
-                questionText.innerHTML = `Gefeliciteerd! Je hebt de finish bereikt met ${score} punten!`;
-                answerButtons.forEach(btn => btn.style.display = 'none');
-                feedbackText.innerHTML = '';
-            } else {
-                console.error('Cannot display game over message: HTML elements missing');
-            }
         }
     } catch (error) {
         console.error('Error in update loop:', error);
@@ -265,23 +305,22 @@ function generateQuestion() {
         let question, answer, options;
 
         if (type === 'snelheid') {
-            let afstand = Math.floor(Math.random() * 100) + 10; // 10-110 km
-            let tijd = Math.floor(Math.random() * 10) + 1; // 1-10 uur
+            let afstand = Math.floor(Math.random() * 100) + 10;
+            let tijd = Math.floor(Math.random() * 10) + 1;
             answer = Math.round(afstand / tijd);
             question = `Een auto rijdt ${afstand} km in ${tijd} uur. Wat is de snelheid in km/u?`;
         } else if (type === 'afstand') {
-            let snelheid = Math.floor(Math.random() * 100) + 10; // 10-110 km/u
-            let tijd = Math.floor(Math.random() * 10) + 1; // 1-10 uur
+            let snelheid = Math.floor(Math.random() * 100) + 10;
+            let tijd = Math.floor(Math.random() * 10) + 1;
             answer = snelheid * tijd;
             question = `Een auto rijdt met ${snelheid} km/u gedurende ${tijd} uur. Wat is de afgelegde afstand in km?`;
         } else {
-            let afstand = Math.floor(Math.random() * 100) + 10; // 10-110 km
-            let snelheid = Math.floor(Math.random() * 50) + 10; // 10-60 km/u
+            let afstand = Math.floor(Math.random() * 100) + 10;
+            let snelheid = Math.floor(Math.random() * 50) + 10;
             answer = Math.round(afstand / snelheid);
             question = `Een auto rijdt ${afstand} km met een snelheid van ${snelheid} km/u. Hoe lang duurt de rit in uur?`;
         }
 
-        // Genereer opties
         options = [answer];
         while (options.length < 3) {
             let opt = answer + Math.floor(Math.random() * 20) - 10;
@@ -327,7 +366,7 @@ function checkAnswer(index) {
             score += 10;
             feedbackText.innerHTML = 'Goed gedaan! +10 punten';
             feedbackText.style.color = 'green';
-            document.getElementById('score-value').textContent = score; // Update sidebar score
+            document.getElementById('score-value').textContent = score;
             setTimeout(() => {
                 if (controlsBox) {
                     controlsBox.style.display = 'none';
@@ -341,7 +380,7 @@ function checkAnswer(index) {
             if (score > 0) {
                 score -= 5;
             }
-            document.getElementById('score-value').textContent = score; // Update sidebar score
+            document.getElementById('score-value').textContent = score;
             setTimeout(() => {
                 if (controlsBox) {
                     controlsBox.style.display = 'none';
