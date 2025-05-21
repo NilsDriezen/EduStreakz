@@ -13,7 +13,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: false
+            debug: false // Explicitly disable physics debug to prevent rendering physics bodies
         }
     },
     scene: {
@@ -135,8 +135,13 @@ function create() {
     checkpoints = this.physics.add.group();
     try {
         for (let i = 0; i < 5; i++) {
-            let checkpoint = checkpoints.create(400, 400 - i * 100, null);
-            checkpoint.setSize(50, 10).setVisible(false);
+            // Create a physics body without a texture, ensuring it's not rendered
+            let checkpoint = this.physics.add.existing(
+                this.add.rectangle(400, 400 - i * 100, 50, 10, 0x000000, 0) // Transparent rectangle
+            );
+            checkpoint.body.setImmovable(true);
+            checkpoint.setVisible(false); // Explicitly hide to prevent rendering
+            checkpoints.add(checkpoint);
         }
     } catch (error) {
         console.error('Failed to create checkpoints:', error);
@@ -184,7 +189,6 @@ function create() {
 
 function resetGame(scene) {
     try {
-        // Reset game variables
         score = 0;
         level = 1;
         currentCheckpoint = 0;
@@ -194,20 +198,18 @@ function resetGame(scene) {
         advanceCheckpoint = false;
         isWaiting = false;
 
-        // Reset car position
         if (car) {
             car.setPosition(400, 500);
             car.setVelocity(0);
         }
 
-        // Reactivate checkpoints
         if (checkpoints) {
             checkpoints.getChildren().forEach((checkpoint, index) => {
                 checkpoint.enableBody(true, 400, 400 - index * 100, true, true);
+                checkpoint.setVisible(false); // Ensure checkpoints remain invisible
             });
         }
 
-        // Reset UI
         if (controlsBox && questionText && answerButtons && feedbackText) {
             controlsBox.style.display = 'none';
             questionText.innerHTML = '';
@@ -215,10 +217,8 @@ function resetGame(scene) {
             feedbackText.innerHTML = '';
         }
 
-        // Update score display
         document.getElementById('score-value').textContent = score;
 
-        // Fetch initial score again
         fetchInitialScore(gameName);
 
         console.log('Game reset successfully');
@@ -234,13 +234,11 @@ function update() {
             gameCompleted = true;
             completeGame(gameName, score, level).then(() => {
                 console.log('Game completion logged');
-                // Show game over message and add reset option
                 if (controlsBox && questionText && answerButtons && feedbackText) {
                     controlsBox.style.display = 'block';
                     questionText.innerHTML = `Gefeliciteerd! Je hebt de finish bereikt met ${score} punten!<br><button id="reset-button">Opnieuw Spelen</button>`;
                     answerButtons.forEach(btn => btn.style.display = 'none');
                     feedbackText.innerHTML = '';
-                    // Add event listener for reset button
                     const resetButton = document.getElementById('reset-button');
                     if (resetButton) {
                         resetButton.addEventListener('click', () => {
